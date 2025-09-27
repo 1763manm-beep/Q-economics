@@ -115,27 +115,31 @@
                     </div>
                 `;
                 
-                try {
-                    // Simulate API call with timeout
-                    setTimeout(() => {
-                        // Mock results - in a real app this would come from your backend
-                        const mockResults = [
-                            {
-                                term: query || 'Economic Concept',
-                                description: `Detailed explanation about ${query || 'economics'} in economics. This would be fetched from your database in a real application.`
-                            },
-                            {
-                                term: `Related to ${query || 'Economics'}`,
-                                description: `Additional information about how ${query || 'economics'} relates to other economic concepts.`
-                            }
-                        ];
+                // Fetch results after short delay for animation
+                setTimeout(async () => {
+                    try {
+                        const response = await fetch(`/api/terms?q=${encodeURIComponent(query)}`);
+                        if (!response.ok) {
+                            throw new Error('Search failed');
+                        }
+                        const results = await response.json();
+                        
+                        if (results.length === 0) {
+                            resultsDiv.innerHTML = `
+                                <div class="col-span-2 text-center py-8">
+                                    <h3 class="text-lg font-semibold text-gray-800 mb-2">No results found</h3>
+                                    <p class="text-gray-600">Try searching for a different economic term.</p>
+                                </div>
+                            `;
+                            return;
+                        }
                         
                         let html = '';
-                        mockResults.forEach(item => {
+                        results.forEach(item => {
                             html += `
                                 <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-l-4 border-blue-500 animate__animated animate__fadeIn">
-                                    <h3 class="text-xl font-bold text-gray-800 mb-2">${item.term}</h3>
-                                    <p class="text-gray-600">${item.description}</p>
+                                    <h3 class="text-xl font-bold text-gray-800 mb-2">${escapeHtml(item.term)}</h3>
+                                    <p class="text-gray-600">${escapeHtml(item.description)}</p>
                                 </div>
                             `;
                         });
@@ -150,16 +154,23 @@
                             stagger: 0.1,
                             ease: "power2.out"
                         });
-                    }, 1500);
-                } catch (error) {
-                    resultsDiv.innerHTML = `
-                        <div class="col-span-2 text-center py-8 text-red-500 animate__animated animate__shakeX">
-                            <p>Error fetching results. Please try again.</p>
-                        </div>
-                    `;
-                }
+                    } catch (error) {
+                        resultsDiv.innerHTML = `
+                            <div class="col-span-2 text-center py-8 text-red-500 animate__animated animate__shakeX">
+                                <p>Error fetching results. Please try again.</p>
+                            </div>
+                        `;
+                    }
+                }, 1500);
             });
         });
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
     </script>
 
     <footer class="bg-gray-100 border-t border-gray-300 py-10 mt-16">

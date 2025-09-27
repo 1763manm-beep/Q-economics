@@ -245,6 +245,77 @@ app.delete('/admin/quiz/:id/question/:qIndex', async (req, res) => {
   }
 });
 
+// Terms management APIs
+app.get('/api/terms', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM terms ORDER BY term ASC');
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch terms' });
+  }
+});
+
+app.post('/admin/terms', async (req, res) => {
+  try {
+    const { term, description } = req.body;
+    if (!term || !description) {
+      return res.status(400).json({ error: 'Term and description required' });
+    }
+    const result = await pool.query(
+      'INSERT INTO terms (term, description) VALUES ($1, $2) RETURNING *',
+      [term.trim(), description.trim()]
+    );
+    res.json({ success: true, term: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    if (err.code === '23505') {
+      res.status(409).json({ error: 'Term already exists' });
+    } else {
+      res.status(500).json({ error: 'Failed to create term' });
+    }
+  }
+});
+
+app.put('/admin/terms/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { term, description } = req.body;
+    if (!term || !description) {
+      return res.status(400).json({ error: 'Term and description required' });
+    }
+    const result = await pool.query(
+      'UPDATE terms SET term = $1, description = $2 WHERE id = $3 RETURNING *',
+      [term.trim(), description.trim(), parseInt(id)]
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Term not found' });
+    }
+    res.json({ success: true, term: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    if (err.code === '23505') {
+      res.status(409).json({ error: 'Term already exists' });
+    } else {
+      res.status(500).json({ error: 'Failed to update term' });
+    }
+  }
+});
+
+app.delete('/admin/terms/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query('DELETE FROM terms WHERE id = $1 RETURNING id', [parseInt(id)]);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Term not found' });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to delete term' });
+  }
+});
+
 // Listen
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
