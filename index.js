@@ -140,11 +140,62 @@ app.post('/admin/upload', upload.single('quizFile'), async (req, res) => {
 // API endpoint for quizzes
 app.get('/api/quizzes', async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT id, title, type, questions FROM quizzes ORDER BY created_at DESC');
+    const { rows } = await pool.query('SELECT id, title, type, questions, created_at FROM quizzes ORDER BY created_at DESC');
     res.json(rows.map(row => ({ ...row, questions: JSON.parse(row.questions) })));
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to fetch quizzes' });
+  }
+});
+
+// Admin management APIs
+app.put('/admin/quiz/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, questions } = req.body; // questions as array of objects
+    const query = `
+      UPDATE quizzes 
+      SET title = $1, questions = $2 
+      WHERE id = $3 
+      RETURNING id;
+    `;
+    const values = [title || '', JSON.stringify(questions), id];
+    const result = await pool.query(query, values);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Quiz not found' });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to update quiz' });
+  }
+});
+
+app.delete('/admin/quiz/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await pool.query('DELETE FROM quizzes WHERE id = $1', [id]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to delete quiz' });
+  }
+});
+
+app.delete('/admin/quiz/:id/question/:qIndex', async (req, res) => {
+  try {
+    const { id, qIndex } = req.params;
+    const { rows } = await pool.query('SELECT questions FROM quizzes WHERE id = $1', [id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Quiz not found' });
+    }
+    const questions = JSON.parse(rows[0].questions);
+    questions.splice(parseInt(qIndex), 1);
+    await pool.query('UPDATE quizzes SET questions = $1 WHERE id = $2', [JSON.stringify(questions), id]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to delete question' });
   }
 });
 
