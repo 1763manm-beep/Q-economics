@@ -7,157 +7,30 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="Style.css">
     <style>
-        body {
-            font-family: 'Georgia', serif;
-        }
-        
-        .font-serif {
-            font-family: 'Georgia', serif;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 50;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 2% auto;
-            padding: 20px;
-            border: none;
-            width: 90%;
-            max-width: 1000px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border-radius: 8px;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: black;
-        }
-
-        .tab-btn {
-            padding: 0.5rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            transition: 0.2s;
-            background-color: white;
-            color: gray;
-            border: 1px solid lightgray;
-        }
-
-        .tab-btn.active {
-            background-color: #2563eb;
-            color: white;
-        }
-
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        .question-item {
-            background-color: white;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            border: 1px solid #d1d5db;
-            margin-bottom: 1rem;
-        }
-
-        .option-input {
-            padding: 0.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.25rem;
-            width: 100%;
-            margin-bottom: 0.5rem;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .quiz-item {
-            background-color: white;
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            border: 1px solid #d1d5db;
-            margin-bottom: 1rem;
-        }
-
-        .quiz-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #1f2937;
-            margin-bottom: 0.25rem;
-        }
-
-        .quiz-info {
-            font-size: 0.875rem;
-            color: #6b7280;
-        }
-
-        .edit-delete-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .edit-btn, .delete-btn {
-            padding: 0.5rem 1rem;
-            border-radius: 0.25rem;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            font-size: 0.875rem;
-        }
-
-        .edit-btn {
-            background-color: #2563eb;
-        }
-
-        .edit-btn:hover {
-            background-color: #1d4ed8;
-        }
-
-        .delete-btn {
-            background-color: #dc2626;
-        }
-
-        .delete-btn:hover {
-            background-color: #b91c1c;
-        }
-
-        textarea {
-            resize: vertical;
-        }
-
-        .lesson-input {
-            padding: 0.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.25rem;
-            width: 100%;
-            margin-bottom: 0.5rem;
-        }
+        body { font-family: 'Georgia', serif; }
+        .font-serif { font-family: 'Georgia', serif; }
+        .modal { display: none; position: fixed; z-index: 50; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: #fefefe; margin: 2% auto; padding: 20px; border: none; width: 90%; max-width: 1000px; max-height: 90vh; overflow-y: auto; border-radius: 8px; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: black; }
+        .tab-btn { padding: 0.5rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: 0.2s; background-color: white; color: gray; border: 1px solid lightgray; }
+        .tab-btn.active { background-color: #2563eb; color: white; }
+        .section { display: none; }
+        .section.active { display: block; }
+        .question-item { background-color: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #d1d5db; margin-bottom: 1rem; }
+        .option-input { padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.25rem; width: 100%; margin-bottom: 0.5rem; }
+        .tabs { display: flex; gap: 1rem; margin-bottom: 1rem; overflow-x: auto; }
+        .quiz-item { background-color: white; padding: 1.5rem; border-radius: 0.5rem; border: 1px solid #d1d5db; margin-bottom: 1rem; }
+        .quiz-title { font-size: 1.25rem; font-weight: bold; color: #1f2937; margin-bottom: 0.25rem; }
+        .quiz-info { font-size: 0.875rem; color: #6b7280; }
+        .edit-delete-buttons { display: flex; gap: 0.5rem; }
+        .edit-btn, .delete-btn { padding: 0.5rem 1rem; border-radius: 0.25rem; color: white; border: none; cursor: pointer; transition: background-color 0.2s; font-size: 0.875rem; }
+        .edit-btn { background-color: #2563eb; }
+        .edit-btn:hover { background-color: #1d4ed8; }
+        .delete-btn { background-color: #dc2626; }
+        .delete-btn:hover { background-color: #b91c1c; }
+        textarea { resize: vertical; }
+        .lesson-item { background-color: #f9fafb; padding: 1rem; border-radius: 0.5rem; border: 1px solid #d1d5db; margin-bottom: 1rem; }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -199,7 +72,7 @@
                     
                     <!-- Download Sample -->
                     <div class="text-center">
-                        <a href="/sample-quiz.csv" download class="inline-block bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-colors font-serif">
+                        <a href="/sample-quiz.csv" download="sample-quiz.csv" class="inline-block bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-colors font-serif">
                             Download Sample CSV Template
                         </a>
                         <p class="text-xs text-gray-500 mt-2">Edit in Excel/Google Sheets and save as CSV. Columns: Question,OptionA,OptionB,OptionC,OptionD,CorrectAnswer (A/B/C/D)</p>
@@ -229,65 +102,54 @@
                     </div>
                     <div id="courses-list" class="space-y-4"></div>
                 </div>
+            </div>
 
-                <div id="courses-section" class="section">
-                    <h2 class="text-2xl font-serif font-bold text-gray-800 mb-4">Manage Courses</h2>
-                    <div class="flex justify-between items-center mb-4">
-                        <button type="button" onclick="createNewCourse()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-serif">Add New Course</button>
-                    </div>
-                    <div id="courses-list" class="space-y-4"></div>
-                </div>
+            <!-- Status Messages -->
+            <div id="status" class="mt-4 hidden"></div>
 
-                <!-- Status Messages -->
-                <div id="status" class="mt-4 hidden"></div>
-
-                <!-- Edit Quiz Modal -->
-                <div id="edit-modal" class="modal">
-                    <div class="modal-content">
-                        <span class="close" onclick="closeEditModal()">&times;</span>
-                        <h2 id="modal-title" class="text-xl font-bold mb-4 font-serif">Edit Quiz</h2>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Quiz Title:</label>
-                        <input type="text" id="edit-quiz-title" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500">
-                        <div id="edit-questions-container" class="space-y-4 mb-4"></div>
-                        <div class="flex space-x-2">
-                            <button type="button" onclick="addQuestion()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">Add Question</button>
-                            <button type="button" onclick="saveQuiz()" id="save-quiz-btn" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">Save Changes</button>
-                        </div>
+            <!-- Edit Quiz Modal -->
+            <div id="edit-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeEditModal()">&times;</span>
+                    <h2 id="modal-title" class="text-xl font-bold mb-4 font-serif">Edit Quiz</h2>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Quiz Title:</label>
+                    <input type="text" id="edit-quiz-title" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500">
+                    <div id="edit-questions-container" class="space-y-4 mb-4"></div>
+                    <div class="flex space-x-2">
+                        <button type="button" onclick="addQuestion()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">Add Question</button>
+                        <button type="button" onclick="saveQuiz()" id="save-quiz-btn" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">Save Changes</button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Edit Term Modal -->
-                <div id="term-modal" class="modal">
-                    <div class="modal-content">
-                        <span class="close" onclick="closeTermModal()">&times;</span>
-                        <h2 id="term-modal-title" class="text-xl font-bold mb-4 font-serif">Add Term</h2>
-                        <label for="edit-term" class="block text-sm font-medium text-gray-700 mb-2">Term:</label>
-                        <input type="text" id="edit-term" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500">
-                        <label for="edit-description" class="block text-sm font-medium text-gray-700 mb-2">Description:</label>
-                        <textarea id="edit-description" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500" rows="4" placeholder="Enter description for the term..."></textarea>
-                        <div class="flex space-x-2 justify-end">
-                            <button type="button" onclick="saveTerm()" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">Save Term</button>
-                        </div>
+            <!-- Edit Term Modal -->
+            <div id="term-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeTermModal()">&times;</span>
+                    <h2 id="term-modal-title" class="text-xl font-bold mb-4 font-serif">Add Term</h2>
+                    <label for="edit-term" class="block text-sm font-medium text-gray-700 mb-2">Term:</label>
+                    <input type="text" id="edit-term" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500">
+                    <label for="edit-description" class="block text-sm font-medium text-gray-700 mb-2">Description:</label>
+                    <textarea id="edit-description" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500" rows="4" placeholder="Enter description for the term..."></textarea>
+                    <div class="flex space-x-2 justify-end">
+                        <button type="button" onclick="saveTerm()" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">Save Term</button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Edit Course Modal -->
-                <div id="course-modal" class="modal">
-                    <div class="modal-content">
-                        <span class="close" onclick="closeCourseModal()">&times;</span>
-                        <h2 id="course-modal-title" class="text-xl font-bold mb-4 font-serif">Add Course</h2>
-                        <label for="edit-module" class="block text-sm font-medium text-gray-700 mb-2">Module Title:</label>
-                        <input type="text" id="edit-module" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500" placeholder="e.g., Microeconomics">
-                        <label for="edit-notes-url" class="block text-sm font-medium text-gray-700 mb-2 mb-4">Notes URL (optional):</label>
-                        <input type="url" id="edit-notes-url" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500" placeholder="https://example.com/notes.pdf">
-                        <div class="border rounded-lg p-4 mb-4">
-                            <h3 class="font-bold mb-3">Lessons</h3>
-                            <div id="edit-lessons-container" class="space-y-4 mb-4"></div>
-                            <button type="button" onclick="addLesson()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">Add Lesson</button>
-                        </div>
-                        <div class="flex space-x-2 justify-end">
-                            <button type="button" onclick="saveCourse()" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">Save Course</button>
-                        </div>
+            <!-- Edit Course Modal -->
+            <div id="course-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeCourseModal()">&times;</span>
+                    <h2 id="course-modal-title" class="text-xl font-bold mb-4 font-serif">Add Course</h2>
+                    <label for="course-module" class="block text-sm font-medium text-gray-700 mb-2">Module Title:</label>
+                    <input type="text" id="course-module" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500" placeholder="e.g., Microeconomics">
+                    <label for="course-notes-url" class="block text-sm font-medium text-gray-700 mb-2">Notes URL (optional):</label>
+                    <input type="url" id="course-notes-url" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500" placeholder="https://example.com/notes.pdf">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Lessons JSON (advanced, optional - auto-generated from form):</label>
+                    <textarea id="course-json-content" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500" rows="10" placeholder='{"lessons": [{"title": "Lesson Title", "content": "Lesson content", "key_points": ["Point 1", "Point 2"]}]}'></textarea>
+                    <div class="flex space-x-2 justify-end">
+                        <button type="button" onclick="saveCourse()" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">Save Course</button>
                     </div>
                 </div>
             </div>
@@ -297,12 +159,22 @@
     <script>
         let isLoggedIn = false;
         const adminPassword = 'admin123';
-        let currentQuizData = null;
         let editingQuizId = null;
-        let currentTermData = null;
+        let currentQuizData = null;
         let editingTermId = null;
-        let currentCourseData = null;
+        let currentTermData = null;
         let editingCourseId = null;
+        let currentCourseData = null;
+
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `mt-4 p-4 rounded-lg ${type === 'success' ? 'bg-green-100 text-green-700' : type === 'error' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`;
+            statusDiv.style.display = 'block';
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
 
         function escapeHtml(text) {
             const div = document.createElement('div');
@@ -310,28 +182,29 @@
             return div.innerHTML;
         }
 
+        // Auth
         function login() {
             const password = document.getElementById('admin-password').value;
             if (password === adminPassword) {
                 isLoggedIn = true;
-                document.getElementById('auth-form').classList.add('hidden');
-                document.getElementById('main-content').classList.remove('hidden');
+                document.getElementById('auth-form').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
                 switchTab('upload');
             } else {
-                alert('Incorrect password');
+                showStatus('Incorrect password', 'error');
             }
         }
 
         function switchTab(tabName) {
-            ['upload-section', 'manage-section', 'knowledge-section', 'courses-section'].forEach(id => {
-                const section = document.getElementById(id);
-                if (section) section.classList.toggle('active', id === tabName + '-section');
-            });
-            ['upload-tab', 'manage-tab', 'knowledge-tab', 'courses-tab'].forEach(id => {
-                const tab = document.getElementById(id);
-                if (tab) tab.classList.toggle('active', id === tabName + '-tab');
-            });
-            if (tabName === 'manage') {
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+            document.getElementById(tabName + '-section').classList.add('active');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName + '-tab').classList.add('active');
+
+            if (tabName === 'upload') {
+                // No load needed
+            } else if (tabName === 'manage') {
                 loadQuizzes();
             } else if (tabName === 'knowledge') {
                 loadTerms();
@@ -340,24 +213,57 @@
             }
         }
 
-        // Quiz functions (existing)
+        // Admin Upload Quiz
+        async function uploadQuiz() {
+            const file = document.getElementById('quiz-file').files[0];
+            const title = document.getElementById('quiz-title').value.trim();
+            if (!file || !title) {
+                showStatus('Please select a file and enter a title', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('quizFile', file);
+            formData.append('title', title);
+
+            try {
+                const response = await fetch('/admin/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    showStatus(`Success! Uploaded ${result.questionsCount} questions.`, 'success');
+                    document.getElementById('quiz-file').value = '';
+                    document.getElementById('quiz-title').value = '';
+                    loadQuizzes(); // Refresh list if on manage tab
+                } else {
+                    const error = await response.json();
+                    showStatus(error.error || 'Upload failed', 'error');
+                }
+            } catch (err) {
+                showStatus('Network error: ' + err.message, 'error');
+            }
+        }
+
+        // Quizzes Management
         async function loadQuizzes() {
             try {
                 const response = await fetch('/api/quizzes');
+                if (!response.ok) throw new Error('Failed to fetch quizzes');
                 const quizzes = await response.json();
-                const list = document.getElementById('quizzes-list');
+                const container = document.getElementById('quizzes-list');
                 if (quizzes.length === 0) {
-                    list.innerHTML = '<p class="text-gray-500 text-center py-8">No quizzes yet. Upload one to get started!</p>';
+                    container.innerHTML = '<p class="text-gray-500 text-center">No quizzes available. Upload one to get started!</p>';
                     return;
                 }
                 let html = '';
                 quizzes.forEach(quiz => {
                     html += `
                         <div class="quiz-item">
-                            <div>
-                                <div class="quiz-title">${escapeHtml(quiz.title)}</div>
-                                <div class="quiz-info">${quiz.questions.length} questions • Created ${new Date(quiz.created_at).toLocaleDateString()}</div>
-                            </div>
+                            <h3 class="quiz-title">${escapeHtml(quiz.title)}</h3>
+                            <p class="quiz-info">${quiz.questions.length} questions • Created ${new Date(quiz.created_at).toLocaleDateString()}</p>
                             <div class="edit-delete-buttons">
                                 <button class="edit-btn" onclick="editQuiz(${quiz.id})">Edit</button>
                                 <button class="delete-btn" onclick="deleteQuiz(${quiz.id})">Delete</button>
@@ -365,36 +271,269 @@
                         </div>
                     `;
                 });
-                list.innerHTML = html;
+                container.innerHTML = html;
             } catch (err) {
-                console.error(err);
-                document.getElementById('quizzes-list').innerHTML = '<p class="text-red-500 text-center py-8">Failed to load quizzes.</p>';
+                showStatus('Failed to load quizzes', 'error');
+                document.getElementById('quizzes-list').innerHTML = '<p class="text-red-500 text-center">Failed to load quizzes.</p>';
             }
         }
 
-        // ... (keep all existing quiz functions: editQuiz, createNewQuiz, closeEditModal, renderQuestions, addQuestion, deleteQuestion, saveQuiz, deleteQuiz)
+        async function createNewQuiz() {
+            editingQuizId = null;
+            currentQuizData = { title: '', questions: [] };
+            document.getElementById('edit-quiz-title').value = '';
+            document.getElementById('modal-title').textContent = 'Create New Quiz';
+            document.getElementById('save-quiz-btn').textContent = 'Create Quiz';
+            renderQuestions([]);
+            document.getElementById('edit-modal').style.display = 'block';
+        }
 
-        // Add the course functions at the end
-        // Course functions
+        async function editQuiz(id) {
+            try {
+                const response = await fetch(`/api/quizzes`);
+                if (!response.ok) throw new Error('Failed to fetch quizzes');
+                const quizzes = await response.json();
+                const quiz = quizzes.find(q => q.id == id);
+                if (!quiz) {
+                    showStatus('Quiz not found', 'error');
+                    return;
+                }
+                editingQuizId = id;
+                currentQuizData = { ...quiz };
+                document.getElementById('edit-quiz-title').value = currentQuizData.title;
+                document.getElementById('modal-title').textContent = 'Edit Quiz';
+                document.getElementById('save-quiz-btn').textContent = 'Save Changes';
+                renderQuestions(currentQuizData.questions);
+                document.getElementById('edit-modal').style.display = 'block';
+            } catch (err) {
+                showStatus('Error loading quiz: ' + err.message, 'error');
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+
+        function renderQuestions(questions) {
+            const container = document.getElementById('edit-questions-container');
+            let html = '';
+            questions.forEach((q, index) => {
+                html += `
+                    <div class="question-item">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Question ${index + 1}:</label>
+                        <textarea id="q-${index}" class="w-full p-2 border rounded mb-2" rows="3">${escapeHtml(q.question)}</textarea>
+                        <div class="grid grid-cols-2 gap-2 mb-2">
+                            ${q.options.map((opt, optIndex) => `
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Option ${optIndex + 1}:</label>
+                                    <input type="text" id="opt-${index}-${optIndex}" class="option-input" value="${escapeHtml(opt)}">
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="mb-2">
+                            <label class="block text-sm font-medium text-gray-700">Correct:</label>
+                            <select id="correct-${index}" class="p-2 border rounded">
+                                <option value="A" ${q.correct === 'A' ? 'selected' : ''}>A</option>
+                                <option value="B" ${q.correct === 'B' ? 'selected' : ''}>B</option>
+                                <option value="C" ${q.correct === 'C' ? 'selected' : ''}>C</option>
+                                <option value="D" ${q.correct === 'D' ? 'selected' : ''}>D</option>
+                            </select>
+                        </div>
+                        <button onclick="removeQuestion(${index})" class="bg-red-500 text-white px-3 py-1 rounded text-sm">Remove</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function addQuestion() {
+            if (!currentQuizData) return;
+            currentQuizData.questions.push({ question: '', options: ['', '', '', ''], correct: 'A' });
+            renderQuestions(currentQuizData.questions);
+        }
+
+        function removeQuestion(index) {
+            if (!currentQuizData) return;
+            currentQuizData.questions.splice(index, 1);
+            renderQuestions(currentQuizData.questions);
+        }
+
+        async function saveQuiz() {
+            if (!currentQuizData) return;
+            const title = document.getElementById('edit-quiz-title').value.trim();
+            if (!title) {
+                showStatus('Title is required', 'error');
+                return;
+            }
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('questions', JSON.stringify(currentQuizData.questions));
+            try {
+                const endpoint = editingQuizId ? `/admin/quiz/${editingQuizId}` : '/admin/quiz';
+                const method = editingQuizId ? 'PUT' : 'POST';
+                const response = await fetch(endpoint, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, questions: currentQuizData.questions })
+                });
+                if (response.ok) {
+                    showStatus(editingQuizId ? 'Quiz updated!' : 'Quiz created!', 'success');
+                    closeEditModal();
+                    loadQuizzes();
+                } else {
+                    const result = await response.json();
+                    showStatus(result.error, 'error');
+                }
+            } catch (err) {
+                showStatus('Network error saving quiz', 'error');
+            }
+        }
+
+        async function deleteQuiz(id) {
+            if (!confirm('Delete quiz?')) return;
+            try {
+                const response = await fetch(`/admin/quiz/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    showStatus('Quiz deleted!', 'success');
+                    loadQuizzes();
+                } else {
+                    const result = await response.json();
+                    showStatus(result.error, 'error');
+                }
+            } catch (err) {
+                showStatus('Network error deleting quiz', 'error');
+            }
+        }
+
+        // Terms Management
+        async function loadTerms() {
+            try {
+                const response = await fetch('/api/terms');
+                if (!response.ok) throw new Error('Failed to fetch terms');
+                const terms = await response.json();
+                const container = document.getElementById('terms-list');
+                if (terms.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500 text-center">No terms available. Add one to get started!</p>';
+                    return;
+                }
+                let html = '';
+                terms.forEach(term => {
+                    html += `
+                        <div class="quiz-item">
+                            <h3 class="quiz-title">${escapeHtml(term.term)}</h3>
+                            <p class="quiz-info">${escapeHtml(term.description.substring(0, 100))}${term.description.length > 100 ? '...' : ''}</p>
+                            <div class="edit-delete-buttons">
+                                <button class="edit-btn" onclick="editTerm(${term.id})">Edit</button>
+                                <button class="delete-btn" onclick="deleteTerm(${term.id})">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch (err) {
+                showStatus('Failed to load terms', 'error');
+                document.getElementById('terms-list').innerHTML = '<p class="text-red-500 text-center">Failed to load terms.</p>';
+            }
+        }
+
+        async function createNewTerm() {
+            editingTermId = null;
+            currentTermData = { term: '', description: '' };
+            document.getElementById('term-modal-title').textContent = 'Add New Term';
+            document.getElementById('edit-term').value = '';
+            document.getElementById('edit-description').value = '';
+            document.getElementById('term-modal').style.display = 'block';
+        }
+
+        async function editTerm(id) {
+            try {
+                const response = await fetch(`/api/terms`);
+                if (!response.ok) throw new Error('Failed to fetch terms');
+                const terms = await response.json();
+                const term = terms.find(t => t.id == id);
+                if (!term) {
+                    showStatus('Term not found', 'error');
+                    return;
+                }
+                editingTermId = id;
+                currentTermData = { ...term };
+                document.getElementById('term-modal-title').textContent = 'Edit Term';
+                document.getElementById('edit-term').value = currentTermData.term;
+                document.getElementById('edit-description').value = currentTermData.description;
+                document.getElementById('term-modal').style.display = 'block';
+            } catch (err) {
+                showStatus('Error loading term', 'error');
+            }
+        }
+
+        function closeTermModal() {
+            document.getElementById('term-modal').style.display = 'none';
+        }
+
+        async function saveTerm() {
+            const term = document.getElementById('edit-term').value.trim();
+            const description = document.getElementById('edit-description').value.trim();
+            if (!term || !description) {
+                showStatus('Term and description are required', 'error');
+                return;
+            }
+            currentTermData = { term, description };
+            try {
+                const endpoint = editingTermId ? `/admin/terms/${editingTermId}` : '/admin/terms';
+                const method = editingTermId ? 'PUT' : 'POST';
+                const response = await fetch(endpoint, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(currentTermData)
+                });
+                if (response.ok) {
+                    showStatus('Term saved!', 'success');
+                    closeTermModal();
+                    loadTerms();
+                } else {
+                    const result = await response.json();
+                    showStatus(result.error, 'error');
+                }
+            } catch (err) {
+                showStatus('Network error saving term', 'error');
+            }
+        }
+
+        async function deleteTerm(id) {
+            if (!confirm('Delete term?')) return;
+            try {
+                const response = await fetch(`/admin/terms/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    showStatus('Term deleted!', 'success');
+                    loadTerms();
+                } else {
+                    const result = await response.json();
+                    showStatus(result.error, 'error');
+                }
+            } catch (err) {
+                showStatus('Network error deleting term', 'error');
+            }
+        }
+
+        // Courses Management
         async function loadCourses() {
             try {
                 const response = await fetch('/api/courses');
+                if (!response.ok) throw new Error('Failed to fetch courses');
                 const courses = await response.json();
-                const list = document.getElementById('courses-list');
+                const container = document.getElementById('courses-list');
                 if (courses.length === 0) {
-                    list.innerHTML = '<p class="text-gray-500 text-center py-8">No courses yet. Add some courses!</p>';
+                    container.innerHTML = '<p class="text-gray-500 text-center">No courses. Add one to get started!</p>';
                     return;
                 }
                 let html = '';
                 courses.forEach(course => {
-                    const lessonCount = course.content ? (JSON.parse(course.content).lessons ? JSON.parse(course.content).lessons.length : 0) : 0;
+                    const lessonCount = course.content ? JSON.parse(course.content).lessons ? JSON.parse(course.content).lessons.length : 0 : 0;
                     const hasNotes = course.notes_url ? 'Yes' : 'No';
                     html += `
                         <div class="quiz-item">
-                            <div>
-                                <div class="quiz-title">${escapeHtml(course.module)}</div>
-                                <div class="quiz-info">${lessonCount} lessons • Notes: ${hasNotes}</div>
-                            </div>
+                            <h3 class="quiz-title">${escapeHtml(course.module)}</h3>
+                            <p class="quiz-info">${lessonCount} lessons • Notes: ${hasNotes}</p>
                             <div class="edit-delete-buttons">
                                 <button class="edit-btn" onclick="editCourse(${course.id})">Edit</button>
                                 <button class="delete-btn" onclick="deleteCourse(${course.id})">Delete</button>
@@ -402,182 +541,119 @@
                         </div>
                     `;
                 });
-                list.innerHTML = html;
+                container.innerHTML = html;
             } catch (err) {
-                console.error(err);
-                document.getElementById('courses-list').innerHTML = '<p class="text-red-500 text-center py-8">Failed to load courses.</p>';
+                showStatus('Failed to load courses', 'error');
+                document.getElementById('courses-list').innerHTML = '<p class="text-red-500 text-center">Failed to load courses.</p>';
             }
         }
 
-        function createNewCourse() {
+        async function createNewCourse() {
             editingCourseId = null;
-            currentCourseData = {
-                module: '',
-                content: { lessons: [] },
-                notes_url: ''
-            };
-            document.getElementById('edit-module').value = '';
-            document.getElementById('edit-notes-url').value = '';
+            currentCourseData = { module: '', content: JSON.stringify({ lessons: [] }), notes_url: '' };
             document.getElementById('course-modal-title').textContent = 'Add New Course';
-            renderCourseLessons(currentCourseData.content.lessons);
+            document.getElementById('course-module').value = '';
+            document.getElementById('course-notes-url').value = '';
+            document.getElementById('course-json-content').value = JSON.stringify({ lessons: [] }, null, 2);
             document.getElementById('course-modal').style.display = 'block';
         }
 
-        function editCourse(id) {
-            fetch('/api/courses')
-                .then(res => res.json())
-                .then(courses => {
-                    const course = courses.find(c => c.id === id);
-                    if (!course) {
-                        alert('Course not found');
-                        return;
-                    }
-                    editingCourseId = id;
-                    const content = typeof course.content === 'string' ? JSON.parse(course.content) : course.content || { lessons: [] };
-                    currentCourseData = {
-                        module: course.module,
-                        content: content,
-                        notes_url: course.notes_url || ''
-                    };
-                    document.getElementById('edit-module').value = currentCourseData.module;
-                    document.getElementById('edit-notes-url').value = currentCourseData.notes_url;
-                    document.getElementById('course-modal-title').textContent = 'Edit Course';
-                    renderCourseLessons(currentCourseData.content.lessons);
-                    document.getElementById('course-modal').style.display = 'block';
-                })
-                .catch(err => alert('Error loading course: ' + err.message));
+        async function editCourse(id) {
+            try {
+                const response = await fetch(`/api/courses`);
+                if (!response.ok) throw new Error('Failed to fetch courses');
+                const courses = await response.json();
+                const course = courses.find(c => c.id == id);
+                if (!course) {
+                    showStatus('Course not found', 'error');
+                    return;
+                }
+                editingCourseId = id;
+                currentCourseData = { ...course };
+                document.getElementById('course-modal-title').textContent = 'Edit Course';
+                document.getElementById('course-module').value = course.module;
+                document.getElementById('course-notes-url').value = course.notes_url || '';
+                const content = typeof course.content === 'string' ? JSON.parse(course.content) : course.content;
+                document.getElementById('course-json-content').value = JSON.stringify(content, null, 2);
+                document.getElementById('course-modal').style.display = 'block';
+            } catch (err) {
+                showStatus('Error loading course', 'error');
+            }
         }
 
         function closeCourseModal() {
             document.getElementById('course-modal').style.display = 'none';
         }
 
-        function renderCourseLessons(lessons) {
-            const container = document.getElementById('edit-lessons-container');
-            let html = '';
-            lessons.forEach((lesson, index) => {
-                html += `
-                    <div class="lesson-item border rounded-lg p-4">
-                        <label class="block font-medium text-gray-700 mb-1">Lesson ${index + 1} Title:</label>
-                        <input type="text" id="lesson-title-${index}" class="w-full p-2 border rounded mb-2" value="${escapeHtml(lesson.title || '')}">
-                        <label class="block font-medium text-gray-700 mb-1">Lesson Content:</label>
-                        <textarea id="lesson-content-${index}" class="w-full p-2 border rounded mb-2" rows="3">${escapeHtml(lesson.content || '')}</textarea>
-                        <label class="block font-medium text-gray-700 mb-1">Key Points (comma separated):</label>
-                        <input type="text" id="lesson-kp-${index}" class="w-full p-2 border rounded mb-3" value="${escapeHtml((lesson.key_points || []).join(', '))}">
-                        <button type="button" onclick="deleteLesson(${index})" class="bg-red-600 text-white py-1 px-3 rounded hover:bg-red-700">Delete Lesson</button>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function addLesson() {
-            if (!currentCourseData) return;
-            currentCourseData.content.lessons.push({
-                title: '',
-                content: '',
-                key_points: []
-            });
-            renderCourseLessons(currentCourseData.content.lessons);
-        }
-
-        function deleteLesson(index) {
-            if (!currentCourseData) return;
-            currentCourseData.content.lessons.splice(index, 1);
-            renderCourseLessons(currentCourseData.content.lessons);
-        }
-
         async function saveCourse() {
-            if (!currentCourseData) return;
-            const module = document.getElementById('edit-module').value.trim();
-            const notes_url = document.getElementById('edit-notes-url').value.trim();
+            const module = document.getElementById('course-module').value.trim();
+            const notes_url = document.getElementById('course-notes-url').value.trim();
+            const jsonContent = document.getElementById('course-json-content').value.trim();
             if (!module) {
-                alert('Module title is required');
+                showStatus('Module title is required', 'error');
                 return;
             }
-            currentCourseData.module = module;
-            currentCourseData.notes_url = notes_url;
-            currentCourseData.content.lessons = currentCourseData.content.lessons.map((lesson, index) => {
-                const titleElem = document.getElementById(`lesson-title-${index}`);
-                const contentElem = document.getElementById(`lesson-content-${index}`);
-                const kpElem = document.getElementById(`lesson-kp-${index}`);
-                if (titleElem && contentElem) {
-                    lesson.title = titleElem.value.trim();
-                    lesson.content = contentElem.value.trim();
-                    lesson.key_points = kpElem ? kpElem.value.split(',').map(kp => kp.trim()).filter(kp => kp) : [];
-                    return lesson.title ? lesson : null;
-                }
-                return null;
-            }).filter(lesson => lesson !== null);
-            if (currentCourseData.content.lessons.length === 0) {
-                alert('At least one lesson with title and content is required');
-                return;
-            }
+            let content;
             try {
-                let response;
-                if (editingCourseId) {
-                    currentCourseData.content = JSON.stringify(currentCourseData.content);
-                    response = await fetch(`/admin/courses/${editingCourseId}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(currentCourseData)
-                    });
-                } else {
-                    currentCourseData.content = JSON.stringify(currentCourseData.content);
-                    response = await fetch('/admin/courses', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(currentCourseData)
-                    });
-                }
-                const result = await response.json();
+                content = JSON.parse(jsonContent);
+            } catch (err) {
+                showStatus('Invalid JSON in content. Please check the format.', 'error');
+                return;
+            }
+            const updatedCourse = { module, content: JSON.stringify(content), notes_url };
+            try {
+                const endpoint = editingCourseId ? `/admin/courses/${editingCourseId}` : '/admin/courses';
+                const method = editingCourseId ? 'PUT' : 'POST';
+                const response = await fetch(endpoint, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedCourse)
+                });
                 if (response.ok) {
+                    showStatus(editingCourseId ? 'Course updated!' : 'Course created!', 'success');
                     closeCourseModal();
                     loadCourses();
-                    showStatus('Course saved successfully!', 'success');
                 } else {
-                    alert('Error saving course: ' + (result.error || 'Unknown error'));
+                    const result = await response.json();
+                    showStatus(result.error, 'error');
                 }
             } catch (err) {
-                console.error(err);
-                alert('Network error: ' + err.message);
+                showStatus('Network error saving course', 'error');
             }
         }
 
         async function deleteCourse(id) {
-            if (!confirm('Are you sure you want to delete this course?')) return;
+            if (!confirm('Delete course?')) return;
             try {
                 const response = await fetch(`/admin/courses/${id}`, { method: 'DELETE' });
-                const result = await response.json();
                 if (response.ok) {
+                    showStatus('Course deleted!', 'success');
                     loadCourses();
-                    showStatus('Course deleted successfully!', 'success');
                 } else {
-                    alert('Error deleting course: ' + (result.error || 'Unknown error'));
+                    const result = await response.json();
+                    showStatus(result.error, 'error');
                 }
             } catch (err) {
-                console.error(err);
-                alert('Network error: ' + err.message);
+                showStatus('Network error deleting course', 'error');
             }
         }
 
-        // Update the window.onclick to include course modal
+        // Modal outside click close
+        window.onclick = function(event) {
+            const modals = ['edit-modal', 'term-modal', 'course-modal'];
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Initial load
         document.addEventListener('DOMContentLoaded', () => {
-            window.onclick = (event) => {
-                if (event.target === document.getElementById('edit-modal')) {
-                    closeEditModal();
-                }
-                if (event.target === document.getElementById('term-modal')) {
-                    closeTermModal();
-                }
-                if (event.target === document.getElementById('course-modal')) {
-                    closeCourseModal();
-                }
-            };
+            // The switchTab already handles loading on tab change
         });
 
-        // ... (keep existing uploadQuiz and showStatus functions)
-        // (assuming the existing quiz upload code remains the same)
     </script>
 </body>
 </html>
