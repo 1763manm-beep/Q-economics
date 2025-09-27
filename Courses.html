@@ -170,8 +170,9 @@
                     if (courses.length === 0) {
                         container.innerHTML = '<p class="text-gray-600 text-center">No courses available. Contact admin to add courses.</p>';
                     }
-                    // Animate in
-                    gsap.from('.module-accordion', {duration: 0.6, y: 30, opacity: 0, stagger: 0.1, ease: "power2.out"});
+                    setTimeout(() => {
+                        gsap.from('.module-accordion', {duration: 0.6, y: 30, opacity: 0, stagger: 0.1, ease: "power2.out"});
+                    }, 100);
                 } catch (error) {
                     console.error('Error loading courses:', error);
                     document.getElementById('coursesContainer').innerHTML = '<p class="text-red-500 text-center">Error loading courses. Please try again.</p>';

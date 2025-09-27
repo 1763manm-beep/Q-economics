@@ -17,6 +17,18 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
+const lessonMediaUpload = multer({ dest: 'uploads/media/' });
+app.post('/admin/upload-lesson-media', lessonMediaUpload.single('media'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+    const mediaPath = `/media/${req.file.filename}`; // Serve as /media/filename
+    res.json({ success: true, media_url: mediaPath });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Upload failed' });
+  }
+});
+
 // Database connection
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,

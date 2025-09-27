@@ -91,12 +91,14 @@ async function initDB() {
           {
             "title": "Supply and Demand",
             "content": "The intersection of supply and demand curves determines the market clearing price.",
-            "key_points": ["Law of Demand: Inverse relationship", "Law of Supply: Direct relationship", "Equilibrium: Where curves meet"]
+            "key_points": ["Law of Demand: Inverse relationship", "Law of Supply: Direct relationship", "Equilibrium: Where curves meet"],
+            "media_url": "https://www.youtube.com/embed/0oZiPtGDFlY"
           },
           {
             "title": "Elasticity",
             "content": "Measures responsiveness of quantity to price changes.",
-            "key_points": ["Price Elasticity", "Income Elasticity", "Cross Elasticity"]
+            "key_points": ["Price Elasticity", "Income Elasticity", "Cross Elasticity"],
+            "media_url": ""
           }
         ]
       }', 'assets/notes/micro.pdf'),
@@ -105,12 +107,14 @@ async function initDB() {
           {
             "title": "GDP and Measurement",
             "content": "Gross Domestic Product measures the value of goods and services produced.",
-            "key_points": ["Nominal vs Real GDP", "Expenditure Approach", "Income Approach"]
+            "key_points": ["Nominal vs Real GDP", "Expenditure Approach", "Income Approach"],
+            "media_url": ""
           },
           {
             "title": "Inflation",
             "content": "Rise in general price level reduces purchasing power.",
-            "key_points": ["CPI", "PPI", "Hyperinflation"]
+            "key_points": ["CPI", "PPI", "Hyperinflation"],
+            "media_url": "https://example.com/inflation-audio.mp3"
           }
         ]
       }', 'assets/notes/macro.pdf'),
@@ -119,12 +123,14 @@ async function initDB() {
           {
             "title": "Regression Analysis",
             "content": "Statistical method to estimate relationship between variables.",
-            "key_points": ["OLS", "R-squared", "Assumptions"]
+            "key_points": ["OLS", "R-squared", "Assumptions"],
+            "media_url": ""
           },
           {
             "title": "Hypothesis Testing",
             "content": "Determine if results are statistically significant.",
-            "key_points": ["p-value", "t-test", "F-test"]
+            "key_points": ["p-value", "t-test", "F-test"],
+            "media_url": ""
           }
         ]
       }', 'assets/notes/econometrics.pdf'),
@@ -133,12 +139,14 @@ async function initDB() {
           {
             "title": "Poverty and Inequality",
             "content": "Analysis of economic disparities and development challenges.",
-            "key_points": ["Gini Coefficient", "Poverty Trap", "Inequality Measures"]
+            "key_points": ["Gini Coefficient", "Poverty Trap", "Inequality Measures"],
+            "media_url": ""
           },
           {
             "title": "Human Capital Theory",
             "content": "Investment in education and health for economic growth.",
-            "key_points": ["Becker's Model", "Returns to Education", "Health Economics"]
+            "key_points": ["Becker's Model", "Returns to Education", "Health Economics"],
+            "media_url": ""
           }
         ]
       }', 'assets/notes/development.pdf'),
@@ -147,12 +155,14 @@ async function initDB() {
           {
             "title": "Capital Markets",
             "content": "Markets for long-term funding, including stocks and bonds.",
-            "key_points": ["Stock Markets", "Bond Markets", "CAPM"]
+            "key_points": ["Stock Markets", "Bond Markets", "CAPM"],
+            "media_url": ""
           },
           {
             "title": "Risk Management",
             "content": "Strategies to identify and mitigate financial risks.",
-            "key_points": ["VaR", "Hedging", "Derivatives"]
+            "key_points": ["VaR", "Hedging", "Derivatives"],
+            "media_url": "https://www.youtube.com/embed/3p8Wst3Vhs4"
           }
         ]
       }', 'assets/notes/finance.pdf')
