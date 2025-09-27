@@ -23,9 +23,13 @@ async function initDB() {
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         type VARCHAR(50) NOT NULL,
-        questions JSONB NOT NULL
+        questions JSONB NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
+
+    // Ensure created_at exists for existing tables
+    await pool.query('ALTER TABLE quizzes ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;');
 
     // Quiz scores
     await pool.query(`
