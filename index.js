@@ -140,7 +140,7 @@ app.post('/admin/upload', upload.single('quizFile'), async (req, res) => {
 // API endpoint for quizzes
 app.get('/api/quizzes', async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT id, title, type, questions, created_at FROM quizzes ORDER BY created_at DESC');
+    const { rows } = await pool.query('SELECT id, title, type, questions, created_at FROM quizzes ORDER BY id DESC');
     res.json(rows.map(row => ({ ...row, questions: JSON.parse(row.questions) })));
   } catch (err) {
     console.error(err);
@@ -179,6 +179,30 @@ app.delete('/admin/quiz/:id', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to delete quiz' });
+  }
+});
+
+// POST /admin/quiz for create new quiz
+app.post('/admin/quiz', async (req, res) => {
+  try {
+    const { title, questions } = req.body;
+    if (!title || !Array.isArray(questions) || questions.length === 0) {
+      return res.status(400).json({ error: 'Title and questions array required' });
+    }
+
+    const type = 'multiple-choice';
+    const query = `
+      INSERT INTO quizzes (title, type, questions)
+      VALUES ($1, $2, $3)
+      RETURNING id;
+    `;
+    const values = [title, type, JSON.stringify(questions)];
+    const result = await pool.query(query, values);
+
+    res.json({ success: true, quizId: result.rows[0].id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to create quiz' });
   }
 });
 
