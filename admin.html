@@ -406,6 +406,145 @@
             status.classList.remove('hidden');
             setTimeout(() => status.classList.add('hidden'), 5000);
         }
+
+        async function loadTerms() {
+            try {
+                const response = await fetch('/api/terms');
+                const terms = await response.json();
+                const list = document.getElementById('terms-list');
+                if (terms.length === 0) {
+                    list.innerHTML = '<p class="text-gray-500 text-center py-8">No terms yet. Add some to the knowledge hub!</p>';
+                    return;
+                }
+                let html = '';
+                terms.forEach(term => {
+                    html += `
+                        <div class="quiz-item">
+                            <div>
+                                <div class="quiz-title">${escapeHtml(term.term)}</div>
+                                <div class="quiz-info">${escapeHtml(term.description.substring(0, 100))}${term.description.length > 100 ? '...' : ''}</div>
+                            </div>
+                            <div class="edit-delete-buttons">
+                                <button class="edit-btn" onclick="editTerm(${term.id})">Edit</button>
+                                <button class="delete-btn" onclick="deleteTerm(${term.id})">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                list.innerHTML = html;
+            } catch (err) {
+                console.error(err);
+                document.getElementById('terms-list').innerHTML = '<p class="text-red-500 text-center py-8">Failed to load terms.</p>';
+            }
+        }
+
+        function editTerm(id) {
+            fetch('/api/terms')
+                .then(res => res.json())
+                .then(terms => {
+                    const term = terms.find(t => t.id === id);
+                    if (!term) {
+                        alert('Term not found');
+                        return;
+                    }
+                    editingTermId = id;
+                    currentTermData = {
+                        term: term.term,
+                        description: term.description
+                    };
+                    document.getElementById('edit-term').value = currentTermData.term;
+                    document.getElementById('edit-description').value = currentTermData.description;
+                    document.getElementById('term-modal-title').textContent = 'Edit Term';
+                    document.getElementById('term-modal').style.display = 'block';
+                })
+                .catch(err => alert('Error loading term: ' + err.message));
+        }
+
+        function createNewTerm() {
+            editingTermId = null;
+            currentTermData = {
+                term: '',
+                description: ''
+            };
+            document.getElementById('edit-term').value = '';
+            document.getElementById('edit-description').value = '';
+            document.getElementById('term-modal-title').textContent = 'Add New Term';
+            document.getElementById('term-modal').style.display = 'block';
+        }
+
+        function closeTermModal() {
+            document.getElementById('term-modal').style.display = 'none';
+        }
+
+        async function saveTerm() {
+            if (!currentTermData) return;
+            const term = document.getElementById('edit-term').value.trim();
+            const description = document.getElementById('edit-description').value.trim();
+            if (!term || !description) {
+                alert('Term and description are required');
+                return;
+            }
+            currentTermData.term = term;
+            currentTermData.description = description;
+            try {
+                let response;
+                if (editingTermId) {
+                    response = await fetch(`/admin/terms/${editingTermId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(currentTermData)
+                    });
+                } else {
+                    response = await fetch('/admin/terms', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(currentTermData)
+                    });
+                }
+                const result = await response.json();
+                if (response.ok) {
+                    closeTermModal();
+                    loadTerms();
+                    showStatus('Term saved successfully!', 'success');
+                } else {
+                    alert('Error saving term: ' + (result.error || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Network error: ' + err.message);
+            }
+        }
+
+        async function deleteTerm(id) {
+            if (!confirm('Are you sure you want to delete this term?')) return;
+            try {
+                const response = await fetch(`/admin/terms/${id}`, { method: 'DELETE' });
+                const result = await response.json();
+                if (response.ok) {
+                    loadTerms();
+                    showStatus('Term deleted successfully!', 'success');
+                } else {
+                    alert('Error deleting term: ' + (result.error || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Network error: ' + err.message);
+            }
+        }
+
+        // Modal outside click close
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('edit-modal');
+            const termModal = document.getElementById('term-modal');
+            window.onclick = (event) => {
+                if (event.target === modal) {
+                    closeEditModal();
+                }
+                if (event.target === termModal) {
+                    closeTermModal();
+                }
+            };
+        });
     </script>
 </body>
 </html>
