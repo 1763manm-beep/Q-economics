@@ -13,14 +13,22 @@
         .modal-content { background-color: #fefefe; margin: 2% auto; padding: 20px; border: none; width: 90%; max-width: 1000px; max-height: 90vh; overflow-y: auto; border-radius: 8px; }
         .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
         .close:hover { color: black; }
-        .tab-btn { padding: 0.5rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition-colors 0.2s; background-color: white; color: gray; border: 1px solid #d1d5db; }
-        .tab-btn.active { background-color: #3b82f6; color: white; }
+        .tab-btn { padding: 0.5rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: 0.2s; background-color: white; color: gray; border: 1px solid lightgray; }
+        .tab-btn.active { background-color: #2563eb; color: white; }
         .section { display: none; }
         .section.active { display: block; }
         .question-item { background-color: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #d1d5db; margin-bottom: 1rem; }
         .option-input { padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.25rem; width: 100%; margin-bottom: 0.5rem; }
-        .main-panel { display: none; }
-        #status { position: fixed; top: 20px; right: 20px; z-index: 100; padding: 1rem; border-radius: 0.5rem; }
+        .tabs { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        .quiz-item { background-color: white; padding: 1.5rem; border-radius: 0.5rem; border: 1px solid #d1d5db; margin-bottom: 1rem; }
+        .quiz-title { font-size: 1.25rem; font-weight: bold; color: #1f2937; margin-bottom: 0.25rem; }
+        .quiz-info { font-size: 0.875rem; color: #6b7280; }
+        .edit-delete-buttons { display: flex; gap: 0.5rem; }
+        .edit-btn, .delete-btn { padding: 0.5rem 1rem; border-radius: 0.25rem; color: white; border: none; cursor: pointer; transition: background-color 0.2s; font-size: 0.875rem; }
+        .edit-btn { background-color: #2563eb; }
+        .edit-btn:hover { background-color: #1d4ed8; }
+        .delete-btn { background-color: #dc2626; }
+        .delete-btn:hover { background-color: #b91c1c; }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -31,254 +39,304 @@
     </nav>
 
     <main class="container mx-auto px-4 py-8">
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-4xl w-full bg-white rounded-xl shadow-lg p-8">
+            <h1 class="text-3xl font-serif font-bold text-gray-800 text-center mb-6">Admin Panel</h1>
+            
+            <!-- Login -->
             <div id="auth-form">
-                <div class="bg-white rounded-xl shadow-lg p-8 text-center">
-                    <h1 class="text-3xl font-serif font-bold text-gray-800 mb-6">Admin Login</h1>
-                    <input type="password" id="admin-password" placeholder="Enter admin password" class="w-full max-w-md p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500">
-                    <button onclick="login()" class="bg-blue-600 text-white py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors font-serif">Login</button>
-                    <p class="text-sm text-gray-600 mt-2">Default password: admin123</p>
+                <input type="password" id="admin-password" placeholder="Enter admin password" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500">
+                <button onclick="login()" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-serif mb-2">Login</button>
+                <p class="text-sm text-gray-600 text-center">Default password: admin123</p>
+            </div>
+
+            <!-- Main Content (hidden until login) -->
+            <div id="main-content" class="hidden">
+                <div class="tabs">
+                    <button id="upload-tab" class="tab-btn active" onclick="switchTab('upload')">Upload Quiz</button>
+                    <button id="manage-tab" class="tab-btn" onclick="switchTab('manage')">Manage Quizzes</button>
+                </div>
+
+                <div id="upload-section" class="section active">
+                    <h2 class="text-2xl font-serif font-bold text-gray-800 mb-4">Upload Quiz Questions</h2>
+                    <p class="text-gray-600 mb-4 font-serif">Use the sample CSV template below to prepare your quiz data, then upload it here.</p>
+                    <form id="upload-form" enctype="multipart/form-data">
+                        <input type="file" id="quiz-file" accept=".csv,.xlsx" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Quiz Title</label>
+                        <input type="text" id="quiz-title" placeholder="e.g., Economics Basics Test" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500">
+                        <button type="button" onclick="uploadQuiz()" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-serif mb-4">Upload Quiz</button>
+                    </form>
+                    
+                    <!-- Download Sample -->
+                    <div class="text-center">
+                        <a href="/sample-quiz.csv" download="sample-quiz.csv" class="inline-block bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-colors font-serif">
+                            Download Sample CSV Template
+                        </a>
+                        <p class="text-xs text-gray-500 mt-2">Edit in Excel/Google Sheets and save as CSV. Columns: Question,OptionA,OptionB,OptionC,OptionD,CorrectAnswer (A/B/C/D)</p>
+                    </div>
+                </div>
+
+                <div id="manage-section" class="section">
+                    <h2 class="text-2xl font-serif font-bold text-gray-800 mb-4">Manage Quizzes</h2>
+                    <div id="quizzes-list" class="space-y-4"></div>
                 </div>
             </div>
 
-            <div id="main-panel" class="main-panel">
-                <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                    <div class="flex justify-center space-x-8 mb-6">
-                        <button onclick="showSection('upload')" id="upload-tab" class="tab-btn active font-serif">Upload Quiz</button>
-                        <button onclick="showSection('manage')" id="manage-tab" class="tab-btn font-serif">Manage Quizzes</button>
-                    </div>
+            <!-- Status Messages -->
+            <div id="status" class="mt-4 hidden"></div>
 
-                    <!-- Upload Section -->
-                    <div id="upload-section" class="section active">
-                        <h2 class="text-2xl font-serif font-bold text-gray-800 mb-4">Upload Quiz Questions</h2>
-                        <p class="text-gray-600 mb-4 font-serif">Use the sample CSV template below to prepare your quiz data, then upload it here.</p>
-                        <form id="upload-form" enctype="multipart/form-data">
-                            <input type="file" id="quiz-file" accept=".csv,.xlsx" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Quiz Title</label>
-                            <input type="text" id="quiz-title" placeholder="e.g., Economics Basics Test" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500">
-                            <button type="button" onclick="uploadQuiz()" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-serif">Upload Quiz</button>
-                        </form>
-                        <div class="mt-6 text-center">
-                            <a href="/sample-quiz.csv" download="sample-quiz.csv" class="inline-block bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-colors font-serif">
-                                Download Sample CSV Template
-                            </a>
-                            <p class="text-xs text-gray-500 mt-2">Edit in Excel/Google Sheets and save as CSV. Columns: Question,OptionA,OptionB,OptionC,OptionD,CorrectAnswer (A/B/C/D)</p>
-                        </div>
-                    </div>
-
-                    <!-- Manage Section -->
-                    <div id="manage-section" class="section hidden">
-                        <h2 class="text-2xl font-serif font-bold text-gray-800 mb-4">Manage Quizzes</h2>
-                        <button onclick="openCreateModal()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-serif mb-4">Create New Quiz</button>
-                        <div id="quizzes-list" class="grid md:grid-cols-1 gap-4">
-                            <!-- Quizzes loaded here -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal for Edit/Create Quiz -->
-            <div id="quiz-modal" class="modal">
+            <!-- Edit Modal -->
+            <div id="edit-modal" class="modal">
                 <div class="modal-content">
-                    <span class="close" onclick="closeModal()">&times;</span>
-                    <h2 id="modal-title" class="text-xl font-serif font-bold text-gray-800 mb-4">Edit Quiz</h2>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
-                    <input type="text" id="edit-title" placeholder="Quiz title" class="w-full p-3 border border-gray-300 rounded-lg mb-4">
-                    <div id="questions-container" class="space-y-4 mb-4">
-                        <!-- Questions will be rendered here -->
-                    </div>
-                    <button type="button" onclick="addQuestionToModal()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-4 font-serif">Add Question</button>
-                    <div class="flex justify-end">
-                        <button type="button" onclick="saveQuiz()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-serif mr-2">Save</button>
-                        <button type="button" onclick="closeModal()" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors font-serif">Cancel</button>
+                    <span class="close" onclick="closeEditModal()">&times;</span>
+                    <h2 class="text-xl font-bold mb-4 font-serif">Edit Quiz</h2>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Quiz Title:</label>
+                    <input type="text" id="edit-quiz-title" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500">
+                    <div id="edit-questions-container" class="space-y-4 mb-4"></div>
+                    <div class="flex space-x-2">
+                        <button type="button" onclick="addQuestion()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">Add Question</button>
+                        <button type="button" onclick="saveQuiz()" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">Save Changes</button>
                     </div>
                 </div>
             </div>
-
-            <div id="status" class="fixed top-4 right-4 z-50 p-4 rounded-lg bg-green-100 text-green-800 hidden"></div>
         </div>
     </main>
 
     <script>
+        let isLoggedIn = false;
         const adminPassword = 'admin123';
+        let currentQuizData = null;
         let editingQuizId = null;
-        let quizzes = [];
 
         function login() {
             const password = document.getElementById('admin-password').value;
             if (password === adminPassword) {
+                isLoggedIn = true;
                 document.getElementById('auth-form').classList.add('hidden');
-                document.getElementById('main-panel').classList.remove('hidden');
-                loadQuizzes();
+                document.getElementById('main-content').classList.remove('hidden');
+                switchTab('upload');
             } else {
                 alert('Incorrect password');
             }
         }
 
-        function showSection(section) {
-            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
-            document.getElementById(section + '-section').classList.remove('hidden');
-            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-            document.getElementById(section + '-tab').classList.add('active');
+        function switchTab(tabName) {
+            ['upload-section', 'manage-section'].forEach(id => {
+                document.getElementById(id).classList.toggle('active', id === tabName + '-section');
+            });
+            ['upload-tab', 'manage-tab'].forEach(id => {
+                document.getElementById(id).classList.toggle('active', id === tabName + '-tab');
+            });
+            if (tabName === 'manage') {
+                loadQuizzes();
+            }
         }
 
         async function loadQuizzes() {
             try {
                 const response = await fetch('/api/quizzes');
-                if (!response.ok) throw new Error();
-                quizzes = await response.json();
-                const container = document.getElementById('quizzes-list');
+                const quizzes = await response.json();
+                const list = document.getElementById('quizzes-list');
                 if (quizzes.length === 0) {
-                    container.innerHTML = '<p class="text-center text-gray-500 font-serif">No quizzes available. Upload one!</p>';
-                } else {
-                    container.innerHTML = quizzes.map(quiz => `
-                        <div class="bg-white p-6 rounded-lg shadow-md mb-4">
-                            <h3 class="text-xl font-serif font-semibold mb-2">${quiz.title}</h3>
-                            <p class="text-gray-600 mb-4 font-serif">${quiz.questions.length} questions</p>
-                            <div class="flex space-x-2">
-                                <button onclick="editQuiz(${quiz.id})" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-serif">Edit</button>
-                                <button onclick="deleteConfirm(${quiz.id})" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 text-sm font-serif">Delete</button>
+                    list.innerHTML = '<p class="text-gray-500 text-center py-8">No quizzes yet. Upload one to get started!</p>';
+                    return;
+                }
+                let html = '';
+                quizzes.forEach(quiz => {
+                    html += `
+                        <div class="quiz-item">
+                            <div>
+                                <div class="quiz-title">${quiz.title}</div>
+                                <div class="quiz-info">${quiz.questions.length} questions • Created ${new Date(quiz.created_at).toLocaleDateString()}</div>
+                            </div>
+                            <div class="edit-delete-buttons">
+                                <button class="edit-btn" onclick="editQuiz(${quiz.id})">Edit</button>
+                                <button class="delete-btn" onclick="deleteQuiz(${quiz.id})">Delete</button>
                             </div>
                         </div>
-                    `).join('');
-                }
+                    `;
+                });
+                list.innerHTML = html;
             } catch (err) {
-                document.getElementById('quizzes-list').innerHTML = '<p class="text-red-500 text-center font-serif">Error loading quizzes</p>';
+                console.error(err);
+                document.getElementById('quizzes-list').innerHTML = '<p class="text-red-500 text-center py-8">Failed to load quizzes.</p>';
             }
         }
 
-        async function editQuiz(id) {
-            editingQuizId = id;
-            const quiz = quizzes.find(q => q.id === id);
-            if (quiz) {
-                document.getElementById('edit-title').value = quiz.title;
-                const container = document.getElementById('questions-container');
-                container.innerHTML = quiz.questions.map((q, idx) => createQuestionElement(idx, q)).join('');
-                document.getElementById('quiz-modal').classList.remove('hidden');
-            }
+        function editQuiz(id) {
+            fetch('/api/quizzes')
+                .then(res => res.json())
+                .then(quizzes => {
+                    const quiz = quizzes.find(q => q.id === id);
+                    if (!quiz) {
+                        alert('Quiz not found');
+                        return;
+                    }
+                    editingQuizId = id;
+                    currentQuizData = {
+                        title: quiz.title,
+                        questions: [...quiz.questions]
+                    };
+                    document.getElementById('edit-quiz-title').value = currentQuizData.title;
+                    renderQuestions(currentQuizData.questions);
+                    document.getElementById('edit-modal').style.display = 'block';
+                })
+                .catch(err => alert('Error loading quiz: ' + err.message));
         }
 
-        function createQuestionElement(idx, q) {
-            return `
-                <div class="question-item">
-                    <textarea class="question-text w-full p-2 border rounded mb-2" rows="3" placeholder="Enter question">${q.question}</textarea>
-                    <div class="grid md:grid-cols-2 gap-2 mb-2">
-                        <input type="text" class="w-full p-2 border rounded" value="${q.options[0]}" placeholder="Option A">
-                        <input type="text" class="w-full p-2 border rounded" value="${q.options[1]}" placeholder="Option B">
-                        <input type="text" class="w-full p-2 border rounded" value="${q.options[2]}" placeholder="Option C">
-                        <input type="text" class="w-full p-2 border rounded" value="${q.options[3]}" placeholder="Option D">
+        function closeEditModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+
+        function renderQuestions(questions) {
+            const container = document.getElementById('edit-questions-container');
+            let html = '';
+            questions.forEach((q, index) => {
+                html += `
+                    <div class="question-item">
+                        <label class="block font-medium text-gray-700 mb-1">Question ${index + 1}:</label>
+                        <textarea id="q-text-${index}" class="w-full p-3 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-blue-500" rows="3">${q.question || ''}</textarea>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Option A:</label>
+                                <input type="text" id="opt-a-${index}" class="option-input" value="${q.options[0] || ''}">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Option B:</label>
+                                <input type="text" id="opt-b-${index}" class="option-input" value="${q.options[1] || ''}">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Option C:</label>
+                                <input type="text" id="opt-c-${index}" class="option-input" value="${q.options[2] || ''}">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Option D:</label>
+                                <input type="text" id="opt-d-${index}" class="option-input" value="${q.options[3] || ''}">
+                            </div>
+                        </div>
+                        <div class="flex items-center mb-3">
+                            <label class="block text-sm font-medium text-gray-700 mr-3">Correct Answer:</label>
+                            <select id="correct-${index}" class="p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+                                <option value="A" ${q.correct === 'A' ? 'selected' : ''}>A</option>
+                                <option value="B" ${q.correct === 'B' ? 'selected' : ''}>B</option>
+                                <option value="C" ${q.correct === 'C' ? 'selected' : ''}>C</option>
+                                <option value="D" ${q.correct === 'D' ? 'selected' : ''}>D</option>
+                            </select>
+                            <button type="button" onclick="deleteQuestion(${index})" class="ml-4 bg-red-600 text-white py-1.5 px-3 rounded hover:bg-red-700 transition-colors">Delete Question</button>
+                        </div>
                     </div>
-                    <select class="p-2 border rounded mb-2 w-full md:w-auto">
-                        <option value="">Select Correct</option>
-                        <option value="A" ${q.correct === 'A' ? 'selected' : ''}>A</option>
-                        <option value="B" ${q.correct === 'B' ? 'selected' : ''}>B</option>
-                        <option value="C" ${q.correct === 'C' ? 'selected' : ''}>C</option>
-                        <option value="D" ${q.correct === 'D' ? 'selected' : ''}>D</option>
-                    </select>
-                    <button onclick="deleteQuestionFromQuiz(this.parentElement)" class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 text-sm font-serif">Delete Question</button>
-                </div>
-            `;
+                `;
+            });
+            container.innerHTML = html;
         }
 
-        function addQuestionToModal() {
-            const idx = document.querySelectorAll('#questions-container > div').length;
-            const container = document.getElementById('questions-container');
-            const div = document.createElement('div');
-            div.className = 'question-item';
-            div.innerHTML = `
-                <textarea class="w-full p-2 border rounded mb-2" rows="3" placeholder="Enter question"></textarea>
-                <div class="grid md:grid-cols-2 gap-2 mb-2">
-                    <input type="text" class="w-full p-2 border rounded" placeholder="Option A">
-                    <input type="text" class="w-full p-2 border rounded" placeholder="Option B">
-                    <input type="text" class="w-full p-2 border rounded" placeholder="Option C">
-                    <input type="text" class="w-full p-2 border rounded" placeholder="Option D">
-                </div>
-                <select class="p-2 border rounded mb-2 w-full md:w-auto">
-                    <option value="">Select Correct</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                </select>
-                <button onclick="deleteQuestionFromQuiz(this.parentElement)" class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 text-sm font-serif">Delete Question</button>
-            `;
-            container.appendChild(div);
+        function addQuestion() {
+            if (!currentQuizData) return;
+            currentQuizData.questions.push({
+                question: '',
+                options: ['', '', '', ''],
+                correct: 'A'
+            });
+            renderQuestions(currentQuizData.questions);
         }
 
-        function deleteQuestionFromQuiz(element) {
-            element.remove();
+        function deleteQuestion(index) {
+            if (!currentQuizData) return;
+            currentQuizData.questions.splice(index, 1);
+            renderQuestions(currentQuizData.questions);
         }
 
         async function saveQuiz() {
-            const title = document.getElementById('edit-title').value;
-            if (!title) return alert('Title is required');
-
-            const questions = [];
-            document.querySelectorAll('.question-item').forEach(item => {
-                const textarea = item.querySelector('textarea');
-                const question = textarea.value.trim();
-                if (!question) return;
-
-                const inputs = item.querySelectorAll('input');
-                const options = Array.from(inputs).map(input => input.value.trim());
-
-                const correctSelect = item.querySelector('select');
-                const correct = correctSelect.value;
-
-                questions.push({ question, options, correct });
-            });
-
-            if (questions.length === 0) return alert('At least one question with content is required');
-
+            if (!currentQuizData || !editingQuizId) return;
+            const title = document.getElementById('edit-quiz-title').value.trim();
+            if (!title) {
+                alert('Title is required');
+                return;
+            }
+            currentQuizData.questions = currentQuizData.questions.map((q, index) => {
+                const textElem = document.getElementById(`q-text-${index}`);
+                if (!textElem) return null;
+                const question = textElem.value.trim();
+                const aElem = document.getElementById(`opt-a-${index}`);
+                const bElem = document.getElementById(`opt-b-${index}`);
+                const cElem = document.getElementById(`opt-c-${index}`);
+                const dElem = document.getElementById(`opt-d-${index}`);
+                const correctElem = document.getElementById(`correct-${index}`);
+                const options = [
+                    aElem ? aElem.value : '',
+                    bElem ? bElem.value : '',
+                    cElem ? cElem.value : '',
+                    dElem ? dElem.value : ''
+                ];
+                const correct = correctElem ? correctElem.value : 'A';
+                if (question) {
+                    return { question, options, correct };
+                }
+                return null;
+            }).filter(q => q !== null);
+            if (currentQuizData.questions.length === 0) {
+                alert('At least one valid question is required');
+                return;
+            }
             try {
                 const response = await fetch(`/admin/quiz/${editingQuizId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ title, questions })
+                    body: JSON.stringify({ title, questions: currentQuizData.questions })
                 });
-
+                const result = await response.json();
                 if (response.ok) {
-                    closeModal();
+                    closeEditModal();
                     loadQuizzes();
                     showStatus('Quiz updated successfully!', 'success');
                 } else {
-                    const result = await response.json();
-                    showStatus(result.error || 'Update failed', 'error');
+                    alert('Error updating quiz: ' + (result.error || 'Unknown error'));
                 }
             } catch (err) {
-                showStatus('Network error during update', 'error');
+                console.error(err);
+                alert('Network error: ' + err.message);
             }
         }
 
-        async function deleteConfirm(id) {
-            if (confirm('Confirm deletion?')) {
-                try {
-                    const response = await fetch(`/admin/quiz/${id}`, { method: 'DELETE' });
-                    if (response.ok) {
-                        loadQuizzes();
-                        showStatus('Quiz deleted', 'success');
-                    }
-                } catch (err) {
-                    showStatus('Delete failed', 'error');
+        async function deleteQuiz(id) {
+            if (!confirm('Are you sure you want to delete this quiz? This action cannot be undone.')) return;
+            try {
+                const response = await fetch(`/admin/quiz/${id}`, { method: 'DELETE' });
+                const result = await response.json();
+                if (response.ok) {
+                    loadQuizzes();
+                    showStatus('Quiz deleted successfully!', 'success');
+                } else {
+                    alert('Error deleting quiz: ' + (result.error || 'Unknown error'));
                 }
+            } catch (err) {
+                console.error(err);
+                alert('Network error: ' + err.message);
             }
         }
 
-        function closeModal() {
-            document.getElementById('quiz-modal').classList.add('hidden');
-        }
+        // Modal outside click close
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('edit-modal');
+            window.onclick = (event) => {
+                if (event.target === modal) {
+                    closeEditModal();
+                }
+            };
+        });
 
         async function uploadQuiz() {
             const file = document.getElementById('quiz-file').files[0];
             const title = document.getElementById('quiz-title').value;
             if (!file || !title) {
-                return alert('File and title required');
+                alert('Please select a file and enter a title');
+                return;
             }
 
             const formData = new FormData();
             formData.append('quizFile', file);
             formData.append('title', title);
 
+            showStatus('Uploading...', 'info');
             try {
                 const response = await fetch('/admin/upload', {
                     method: 'POST',
@@ -286,32 +344,26 @@
                 });
                 const result = await response.json();
                 if (response.ok) {
+                    showStatus(`Success! Uploaded ${result.questionsCount} questions.`, 'success');
                     document.getElementById('upload-form').reset();
                     loadQuizzes();
-                    showStatus(`Success! ${result.questionsCount} questions uploaded.`, 'success');
                 } else {
                     showStatus(result.error || 'Upload failed', 'error');
                 }
             } catch (err) {
-                showStatus('Network error during upload', 'error');
+                showStatus('Network error: ' + err.message, 'error');
             }
         }
 
         function showStatus(message, type) {
             const status = document.getElementById('status');
-            const classes = type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-            status.className = `p-4 rounded-lg ${classes} hidden`;
+            const bgColor = type === 'success' ? '#d4edda' : type === 'error' ? '#f8d7da' : '#d1ecf1';
+            const textColor = type === 'success' ? '#155724' : type === 'error' ? '#721c24' : '#0c5460';
+            status.style.backgroundColor = bgColor;
+            status.style.color = textColor;
             status.textContent = message;
             status.classList.remove('hidden');
-            setTimeout(() => status.classList.add('hidden'), 4000);
-        }
-
-        // Window close modal
-        window.onclick = function(event) {
-            const modal = document.getElementById('quiz-modal');
-            if (event.target === modal) {
-                closeModal();
-            }
+            setTimeout(() => status.classList.add('hidden'), 5000);
         }
     </script>
 </body>
