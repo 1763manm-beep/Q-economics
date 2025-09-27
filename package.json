@@ -4,6 +4,7 @@
   "description": "A comprehensive platform for learning economics with interactive features, quizzes, research resources, and career guidance.",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
