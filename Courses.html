@@ -141,44 +141,33 @@
                     const container = document.getElementById('coursesContainer');
                     container.innerHTML = '';
                     courses.forEach(course => {
-                        const accordion = document.createElement('div');
-                        accordion.className = 'module-accordion';
                         const contentObj = course.content || {};
                         const lessons = contentObj.lessons || [];
-                        let lessonsHtml = '';
-                        lessons.forEach((lesson, index) => {
-                            const mediaHtml = lesson.media_url ? (lesson.media_url.includes('youtube.com') ? `<iframe class="w-full h-48 rounded-lg mb-4" src="${lesson.media_url}" frameborder="0" allowfullscreen></iframe>` : `<p class="text-sm text-gray-500 mb-2">Media: ${lesson.media_url}</p>`) : '';
-                            lessonsHtml += `
-                                <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-                                    <h3 class="text-lg font-semibold text-gray-800 mb-2 cursor-pointer hover:text-blue-600" onclick="window.location.href='/course/${course.id}/lesson/${index}'">${lesson.title}</h3>
-                                    <p class="text-gray-600 mb-3">${lesson.content ? lesson.content.substring(0, 150) + '...' : 'No content available.'}</p>
-                                    ${lesson.key_points && lesson.key_points.length > 0 ? `<ul class="space-y-1 text-sm text-gray-600 mb-3">${lesson.key_points.map(point => `<li>• ${point}</li>`).join('')}</ul>` : ''}
-                                    ${mediaHtml}
-                                    <a href="/course/${course.id}/lesson/${index}" class="text-blue-600 hover:underline font-medium" target="_blank">Read Full Lesson →</a>
-                                </div>
-                            `;
-                        });
-                        accordion.innerHTML = `
-                            <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" role="button" tabindex="0" aria-expanded="false" aria-controls="course-${course.id}-content">
-                                <h2 class="text-xl font-bold text-gray-800 flex justify-between items-center">
-                                    <span>${course.module}</span>
-                                    <span class="text-sm text-gray-500">${lessons.length} lessons</span>
-                                </h2>
-                            </div>
-                            <div id="course-${course.id}-content" class="module-content">
-                                <div class="p-6 border-t">
-                                    ${lessonsHtml || `<p class="text-gray-600">No lessons available yet for ${course.module.toLowerCase()}.</p>`}
-                                    ${course.notes_url ? `<div class="mt-4 p-4 bg-blue-50 rounded-lg"><a href="${course.notes_url}" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors font-serif inline-block" download>Download Notes</a></div>` : ''}
-                                </div>
-                            </div>
+                        const card = document.createElement('div');
+                        card.className = 'bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all';
+                        card.setAttribute('role', 'button');
+                        card.setAttribute('tabindex', '0');
+                        card.innerHTML = `
+                            <h2 class="text-xl font-bold text-gray-800 mb-2">${course.module}</h2>
+                            <p class="text-gray-600 mb-2">${lessons.length} lessons available</p>
+                            <p class="text-sm text-gray-500 mb-4">Click to view all lessons</p>
                         `;
-                        container.appendChild(accordion);
+                        card.addEventListener('click', () => {
+                            window.location.href = `/course/${course.id}`;
+                        });
+                        card.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                window.location.href = `/course/${course.id}`;
+                            }
+                        });
+                        container.appendChild(card);
                     });
                     if (courses.length === 0) {
                         container.innerHTML = '<p class="text-gray-600 text-center">No courses available. Contact admin to add courses.</p>';
                     } else {
                         // Animate after elements are added
-                        gsap.from('.module-accordion', {duration: 0.6, y: 30, opacity: 0, stagger: 0.1, ease: "power2.out"});
+                        gsap.from('.bg-white.rounded-xl', {duration: 0.6, y: 30, opacity: 0, stagger: 0.1, ease: "power2.out"});
                     }
                 } catch (error) {
                     console.error('Error loading courses:', error);
@@ -187,36 +176,17 @@
             }
             loadCourses();
 
-            // Search functionality - enhanced to search lessons too
+            // Search functionality
             document.getElementById('courseSearch').addEventListener('input', (e) => {
                 const query = e.target.value.toLowerCase();
-                const accordions = document.querySelectorAll('.module-accordion');
-                accordions.forEach(accordion => {
-                    const header = accordion.querySelector('h2 span:first-child').textContent.toLowerCase();
-                    const content = accordion.querySelector('.module-content');
-                    let match = header.includes(query);
-                    if (!match && content) {
-                        const lessons = content.querySelectorAll('h3');
-                        match = Array.from(lessons).some(lesson => lesson.textContent.toLowerCase().includes(query));
-                    }
-                    accordion.style.display = match ? 'block' : 'none';
+                const cards = document.querySelectorAll('.bg-white.rounded-xl');
+                cards.forEach(card => {
+                    const header = card.querySelector('h2').textContent.toLowerCase();
+                    const match = header.includes(query);
+                    card.style.display = match ? 'block' : 'none';
                 });
             });
 
-            // Accordion
-            window.toggleModule = function(element) {
-                const content = element.nextElementSibling;
-                if (!content) return;
-                const isActive = element.classList.contains('active');
-                element.classList.toggle('active');
-                content.classList.toggle('active');
-                element.setAttribute('aria-expanded', !isActive);
-                if (!isActive) {
-                    gsap.from(content.querySelectorAll('*'), {duration: 0.5, opacity: 0, y: 20, stagger: 0.05, ease: "power2.out"});
-                } else {
-                    gsap.to(content, {duration: 0.3, height: 0, opacity: 0, ease: "power2.in"});
-                }
-            }
 
             // Multilingual toggle
             window.toggleLanguage = function() {

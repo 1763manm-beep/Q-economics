@@ -44,9 +44,14 @@
         document.addEventListener('DOMContentLoaded', async () => {
             // Parse URL params
             const urlParts = window.location.pathname.split('/');
-            const courseId = parseInt(urlParts[urlParts.length - 2]);
-            const lessonIndex = parseInt(urlParts[urlParts.length - 1]);
-            if (!courseId || isNaN(lessonIndex) || lessonIndex < 0) {
+            let courseId, lessonIndex;
+            const courseIndex = urlParts.indexOf('course');
+            const lessonPartIndex = urlParts.indexOf('lesson');
+            if (courseIndex !== -1 && lessonPartIndex !== -1 && lessonPartIndex === courseIndex + 2) {
+                courseId = parseInt(urlParts[courseIndex + 1]);
+                lessonIndex = parseInt(urlParts[lessonPartIndex + 1]);
+            }
+            if (isNaN(courseId) || isNaN(lessonIndex) || lessonIndex < 0) {
                 document.getElementById('lessonContainer').innerHTML = '<p class="text-red-500">Invalid lesson URL.</p>';
                 return;
             }
