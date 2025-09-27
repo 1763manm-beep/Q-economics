@@ -152,10 +152,14 @@ app.get('/api/quizzes', async (req, res) => {
     res.json(rows.map(row => {
       let questions = [];
       if (row.questions) {
-        try {
-          questions = JSON.parse(row.questions);
-        } catch (e) {
-          console.warn('Invalid JSON for quiz ' + row.id + ': ' + row.questions);
+        if (Array.isArray(row.questions)) {
+          questions = row.questions;
+        } else if (typeof row.questions === 'string') {
+          try {
+            questions = JSON.parse(row.questions);
+          } catch (e) {
+            console.warn('Invalid JSON for quiz ' + row.id + ': ' + row.questions);
+          }
         }
       }
       return { ...row, questions };
