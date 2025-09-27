@@ -23,11 +23,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'Index.html'));
 });
 
-// Catch-all for other HTML files
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, req.path));
-});
-
+// Listen
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
