@@ -348,6 +348,59 @@ app.get('/api/courses/:id', async (req, res) => {
   }
 });
 
+// Courses Admin APIs
+app.post('/admin/courses', async (req, res) => {
+  try {
+    const { module, content, notes_url } = req.body;
+    if (!module || !content) {
+      return res.status(400).json({ error: 'Module and content required' });
+    }
+    const result = await pool.query(
+      'INSERT INTO courses (module, content, notes_url) VALUES ($1, $2, $3) RETURNING *',
+      [module.trim(), content, notes_url || null]
+    );
+    res.json({ success: true, course: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to create course' });
+  }
+});
+
+app.put('/admin/courses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { module, content, notes_url } = req.body;
+    if (!module || !content) {
+      return res.status(400).json({ error: 'Module and content required' });
+    }
+    const result = await pool.query(
+      'UPDATE courses SET module = $1, content = $2, notes_url = $3 WHERE id = $4 RETURNING *',
+      [module.trim(), content, notes_url || null, parseInt(id)]
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Course not found' });
+    }
+    res.json({ success: true, course: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to update course' });
+  }
+});
+
+app.delete('/admin/courses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query('DELETE FROM courses WHERE id = $1 RETURNING id', [parseInt(id)]);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Course not found' });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to delete course' });
+  }
+});
+
 app.delete('/admin/terms/:id', async (req, res) => {
   try {
     const { id } = req.params;
