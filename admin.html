@@ -29,6 +29,7 @@
         .edit-btn:hover { background-color: #1d4ed8; }
         .delete-btn { background-color: #dc2626; }
         .delete-btn:hover { background-color: #b91c1c; }
+        textarea { resize: vertical; }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -77,6 +78,9 @@
 
                 <div id="manage-section" class="section">
                     <h2 class="text-2xl font-serif font-bold text-gray-800 mb-4">Manage Quizzes</h2>
+                    <div class="flex justify-between items-center mb-4">
+                        <button type="button" onclick="createNewQuiz()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-serif">Create New Quiz</button>
+                    </div>
                     <div id="quizzes-list" class="space-y-4"></div>
                 </div>
             </div>
@@ -88,13 +92,13 @@
             <div id="edit-modal" class="modal">
                 <div class="modal-content">
                     <span class="close" onclick="closeEditModal()">&times;</span>
-                    <h2 class="text-xl font-bold mb-4 font-serif">Edit Quiz</h2>
+                    <h2 id="modal-title" class="text-xl font-bold mb-4 font-serif">Edit Quiz</h2>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Quiz Title:</label>
                     <input type="text" id="edit-quiz-title" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500">
                     <div id="edit-questions-container" class="space-y-4 mb-4"></div>
                     <div class="flex space-x-2">
                         <button type="button" onclick="addQuestion()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">Add Question</button>
-                        <button type="button" onclick="saveQuiz()" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">Save Changes</button>
+                        <button type="button" onclick="saveQuiz()" id="save-quiz-btn" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">Save Changes</button>
                     </div>
                 </div>
             </div>
@@ -106,6 +110,11 @@
         const adminPassword = 'admin123';
         let currentQuizData = null;
         let editingQuizId = null;
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
         function login() {
             const password = document.getElementById('admin-password').value;
@@ -177,10 +186,25 @@
                         questions: [...quiz.questions]
                     };
                     document.getElementById('edit-quiz-title').value = currentQuizData.title;
+                    document.getElementById('modal-title').textContent = 'Edit Quiz';
+                    document.getElementById('save-quiz-btn').textContent = 'Save Changes';
                     renderQuestions(currentQuizData.questions);
                     document.getElementById('edit-modal').style.display = 'block';
                 })
                 .catch(err => alert('Error loading quiz: ' + err.message));
+        }
+
+        function createNewQuiz() {
+            editingQuizId = null;
+            currentQuizData = {
+                title: '',
+                questions: []
+            };
+            document.getElementById('edit-quiz-title').value = '';
+            document.getElementById('modal-title').textContent = 'Create New Quiz';
+            document.getElementById('save-quiz-btn').textContent = 'Create Quiz';
+            renderQuestions(currentQuizData.questions);
+            document.getElementById('edit-modal').style.display = 'block';
         }
 
         function closeEditModal() {
@@ -191,35 +215,38 @@
             const container = document.getElementById('edit-questions-container');
             let html = '';
             questions.forEach((q, index) => {
+                const escapedQuestion = escapeHtml(q.question || '');
+                const escapedOptions = (q.options || ['', '', '', '']).map(opt => escapeHtml(opt));
+                const correct = q.correct || 'A';
                 html += `
                     <div class="question-item">
                         <label class="block font-medium text-gray-700 mb-1">Question ${index + 1}:</label>
-                        <textarea id="q-text-${index}" class="w-full p-3 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-blue-500" rows="3">${q.question || ''}</textarea>
+                        <textarea id="q-text-${index}" class="w-full p-3 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-blue-500" rows="3">${escapedQuestion}</textarea>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Option A:</label>
-                                <input type="text" id="opt-a-${index}" class="option-input" value="${q.options[0] || ''}">
+                                <input type="text" id="opt-a-${index}" class="option-input" value="${escapedOptions[0]}">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Option B:</label>
-                                <input type="text" id="opt-b-${index}" class="option-input" value="${q.options[1] || ''}">
+                                <input type="text" id="opt-b-${index}" class="option-input" value="${escapedOptions[1]}">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Option C:</label>
-                                <input type="text" id="opt-c-${index}" class="option-input" value="${q.options[2] || ''}">
+                                <input type="text" id="opt-c-${index}" class="option-input" value="${escapedOptions[2]}">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Option D:</label>
-                                <input type="text" id="opt-d-${index}" class="option-input" value="${q.options[3] || ''}">
+                                <input type="text" id="opt-d-${index}" class="option-input" value="${escapedOptions[3]}">
                             </div>
                         </div>
                         <div class="flex items-center mb-3">
                             <label class="block text-sm font-medium text-gray-700 mr-3">Correct Answer:</label>
                             <select id="correct-${index}" class="p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500">
-                                <option value="A" ${q.correct === 'A' ? 'selected' : ''}>A</option>
-                                <option value="B" ${q.correct === 'B' ? 'selected' : ''}>B</option>
-                                <option value="C" ${q.correct === 'C' ? 'selected' : ''}>C</option>
-                                <option value="D" ${q.correct === 'D' ? 'selected' : ''}>D</option>
+                                <option value="A" ${correct === 'A' ? 'selected' : ''}>A</option>
+                                <option value="B" ${correct === 'B' ? 'selected' : ''}>B</option>
+                                <option value="C" ${correct === 'C' ? 'selected' : ''}>C</option>
+                                <option value="D" ${correct === 'D' ? 'selected' : ''}>D</option>
                             </select>
                             <button type="button" onclick="deleteQuestion(${index})" class="ml-4 bg-red-600 text-white py-1.5 px-3 rounded hover:bg-red-700 transition-colors">Delete Question</button>
                         </div>
@@ -246,12 +273,13 @@
         }
 
         async function saveQuiz() {
-            if (!currentQuizData || !editingQuizId) return;
+            if (!currentQuizData) return;
             const title = document.getElementById('edit-quiz-title').value.trim();
             if (!title) {
                 alert('Title is required');
                 return;
             }
+            currentQuizData.title = title;
             currentQuizData.questions = currentQuizData.questions.map((q, index) => {
                 const textElem = document.getElementById(`q-text-${index}`);
                 if (!textElem) return null;
@@ -268,28 +296,40 @@
                     dElem ? dElem.value : ''
                 ];
                 const correct = correctElem ? correctElem.value : 'A';
-                if (question) {
+                if (question && options.some(opt => opt.trim())) {
                     return { question, options, correct };
                 }
                 return null;
             }).filter(q => q !== null);
             if (currentQuizData.questions.length === 0) {
-                alert('At least one valid question is required');
+                alert('At least one valid question with options is required');
                 return;
             }
             try {
-                const response = await fetch(`/admin/quiz/${editingQuizId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ title, questions: currentQuizData.questions })
-                });
+                let response;
+                if (editingQuizId) {
+                    // Update existing
+                    response = await fetch(`/admin/quiz/${editingQuizId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ title, questions: currentQuizData.questions })
+                    });
+                    showStatus('Quiz updated successfully!', 'success');
+                } else {
+                    // Create new
+                    response = await fetch('/admin/quiz', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(currentQuizData)
+                    });
+                    showStatus('Quiz created successfully!', 'success');
+                }
                 const result = await response.json();
                 if (response.ok) {
                     closeEditModal();
                     loadQuizzes();
-                    showStatus('Quiz updated successfully!', 'success');
                 } else {
-                    alert('Error updating quiz: ' + (result.error || 'Unknown error'));
+                    alert('Error saving quiz: ' + (result.error || 'Unknown error'));
                 }
             } catch (err) {
                 console.error(err);

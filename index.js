@@ -7,6 +7,7 @@ const multer = require('multer');
 const XLSX = require('xlsx');
 
 const upload = multer({ dest: 'uploads/' });
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -72,7 +73,13 @@ app.post('/admin/upload', upload.single('quizFile'), async (req, res) => {
     }
 
     // Parse file with XLSX (handles both CSV and XLSX)
-    const workbook = XLSX.readFile(req.file.path);
+    let workbook;
+    if (req.file.originalname.toLowerCase().endsWith('.csv')) {
+      const csvData = fs.readFileSync(req.file.path, 'utf8');
+      workbook = XLSX.read(csvData, { type: 'string' });
+    } else {
+      workbook = XLSX.readFile(req.file.path);
+    }
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
