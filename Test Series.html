@@ -5,30 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Series - Q-Economics</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="Style.css">
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
     <style>
-        body {
-            font-family: 'Georgia', serif;
-        }
-        
-        .font-serif {
-            font-family: 'Georgia', serif;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-        }
-        .quiz-question { margin-bottom: 1rem; }
-        .quiz-option { margin-bottom: 0.5rem; }
-        .quiz-results { background: #f0f9ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #3b82f6; }
+        body { font-family: 'Georgia', serif; }
+        .font-serif { font-family: 'Georgia', serif; }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 min-h-screen">
     <nav class="bg-white border-b border-gray-300 py-4">
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
             <a href="/" class="text-2xl font-serif font-bold text-gray-900 mb-4 md:mb-0 flex items-center">
@@ -50,213 +33,42 @@
     </nav>
 
     <main class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold text-gray-800 mb-8 font-serif">Test Series & Practice</h1>
-        
-        <div class="bg-white rounded-xl p-8 shadow-lg mb-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Exam Preparation</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-blue-50 p-6 rounded-xl border-l-4 border-blue-500 hover:shadow-lg transition-all">
-                    <h3 class="text-xl font-bold text-blue-800 mb-3">Basic Concepts</h3>
-                    <p class="text-gray-600 mb-4">Test your understanding of fundamental economic principles.</p>
-                    <button onclick="startQuiz('basic')" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors font-medium" aria-label="Start Basic Concepts Test">Start Test</button>
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl font-serif font-bold text-gray-800 text-center mb-8">Test Series</h1>
+            <p class="text-lg text-gray-600 text-center mb-12 font-serif">Practice with our comprehensive quiz collection. Select a test to begin.</p>
+
+            <!-- Quiz List -->
+            <div id="quiz-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <!-- Quizzes will be loaded here via JS -->
+            </div>
+
+            <!-- Quiz Interface (hidden initially) -->
+            <div id="quiz-interface" class="hidden bg-white rounded-xl p-8 shadow-lg">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 id="quiz-title" class="text-2xl font-serif font-bold text-gray-800"></h2>
+                    <div class="text-lg text-gray-600">
+                        Question <span id="current-question">1</span> of <span id="total-questions"></span>
+                    </div>
                 </div>
-                <div class="bg-green-50 p-6 rounded-xl border-l-4 border-green-500 hover:shadow-lg transition-all">
-                    <h3 class="text-xl font-bold text-green-800 mb-3">Macroeconomics</h3>
-                    <p class="text-gray-600 mb-4">Evaluate your knowledge of national and global economic systems.</p>
-                    <button onclick="startQuiz('macro')" class="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors font-medium" aria-label="Start Macroeconomics Test">Start Test</button>
+                <div id="quiz-container"></div>
+                <div class="flex justify-between mt-8">
+                    <button id="prev-btn" onclick="prevQuestion()" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed font-serif" disabled>Previous</button>
+                    <button id="submit-btn" onclick="submitQuiz()" class="bg-blue-600 text-white px-8 py-2 rounded-lg hover:bg-blue-700 font-serif">Submit Quiz</button>
+                    <button id="next-btn" onclick="nextQuestion()" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 font-serif">Next</button>
                 </div>
-                <div class="bg-purple-50 p-6 rounded-xl border-l-4 border-purple-500 hover:shadow-lg transition-all">
-                    <h3 class="text-xl font-bold text-purple-800 mb-3">Microeconomics</h3>
-                    <p class="text-gray-600 mb-4">Assess your grasp of individual and business economic decisions.</p>
-                    <button onclick="startQuiz('micro')" class="inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition-colors font-medium" aria-label="Start Microeconomics Test">Start Test</button>
-                </div>
-                <div class="bg-orange-50 p-6 rounded-xl border-l-4 border-orange-500 hover:shadow-lg transition-all">
-                    <h3 class="text-xl font-bold text-orange-800 mb-3">UPSC Economics</h3>
-                    <p class="text-gray-600 mb-4">Prepare for UPSC Civil Services Economics optional.</p>
-                    <button onclick="startQuiz('upsc')" class="inline-block bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition-colors font-medium" aria-label="Start UPSC Test">Start Test</button>
-                </div>
-                <div class="bg-teal-50 p-6 rounded-xl border-l-4 border-teal-500 hover:shadow-lg transition-all">
-                    <h3 class="text-xl font-bold text-teal-800 mb-3">RBI Grade B</h3>
-                    <p class="text-gray-600 mb-4">Practice for RBI Grade B Economic and Social Issues.</p>
-                    <button onclick="startQuiz('rbi')" class="inline-block bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 transition-colors font-medium" aria-label="Start RBI Grade B Test">Start Test</button>
-                </div>
-                <div class="bg-pink-50 p-6 rounded-xl border-l-4 border-pink-500 hover:shadow-lg transition-all">
-                    <h3 class="text-xl font-bold text-pink-800 mb-3">UGC NET Economics</h3>
-                    <p class="text-gray-600 mb-4">Mock tests for UGC NET/JRF Economics.</p>
-                    <button onclick="startQuiz('ugc')" class="inline-block bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 transition-colors font-medium" aria-label="Start UGC NET Test">Start Test</button>
+            </div>
+
+            <!-- Results (hidden) -->
+            <div id="results" class="hidden bg-white rounded-xl p-8 shadow-lg mt-8">
+                <h2 class="text-3xl font-serif font-bold text-gray-800 text-center mb-6">Quiz Results</h2>
+                <div class="text-center">
+                    <div id="score" class="text-5xl font-bold text-blue-600 mb-4"></div>
+                    <p id="score-text" class="text-xl text-gray-600 mb-6 font-serif"></p>
+                    <a href="/testseries" class="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 font-serif">Take Another Quiz</a>
                 </div>
             </div>
         </div>
-
-        <div id="quizContainer" class="hidden bg-white rounded-xl p-8 shadow-lg mb-12">
-            <h2 id="quizTitle" class="text-2xl font-bold text-gray-800 mb-6 font-serif"></h2>
-            <div id="quizQuestions"></div>
-            <div class="quiz-results mt-6 p-4 bg-blue-50 rounded-lg" id="quizResults" style="display: none;"></div>
-            <button id="submitQuiz" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors font-medium mt-4" style="display: none;">Submit Quiz</button>
-            <button id="resetQuiz" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 transition-colors font-medium mt-4 hidden">Reset Quiz</button>
-        </div>
     </main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            gsap.from('h1', {duration: 0.8, y: -30, opacity: 0, ease: "power2.out"});
-            gsap.from('.grid > div', {
-                duration: 0.6, 
-                y: 50, 
-                opacity: 0, 
-                stagger: 0.15,
-                delay: 0.3,
-                ease: "power2.out"
-            });
-
-            // Quiz data
-            const quizzes = {
-                basic: {
-                    title: "Basic Concepts Quiz",
-                    questions: [
-                        { q: "What is economics?", o: ["Study of money", "Study of scarcity and choice", "Study of markets", "Study of production"], a: 1 },
-                        { q: "Who is known as the father of economics?", o: ["Karl Marx", "Adam Smith", "John Maynard Keynes", "Milton Friedman"], a: 1 },
-                        { q: "Opportunity cost is:", o: ["Cost of production", "Next best alternative forgone", "Total cost", "Fixed cost"], a: 1 },
-                        { q: "Positive economics deals with:", o: ["What ought to be", "What is", "What should be", "What can be"], a: 1 },
-                        { q: "Normative economics deals with:", o: ["Facts", "Values and opinions", "Data analysis", "Statistics"], a: 1 }
-                    ]
-                },
-                macro: {
-                    title: "Macroeconomics Quiz",
-                    questions: [
-                        { q: "GDP stands for:", o: ["Gross Domestic Product", "General Development Program", "Global Domestic Product", "Gross Development Product"], a: 0 },
-                        { q: "Inflation is measured by:", o: ["CPI", "GDP", "GNP", "NDP"], a: 0 },
-                        { q: "Fiscal policy is controlled by:", o: ["Central Bank", "Government", "Commercial Banks", "Foreign Exchange"], a: 1 },
-                        { q: "IS-LM model represents:", o: ["Microeconomic equilibrium", "Macroeconomic equilibrium", "Trade balance", "Budget deficit"], a: 1 },
-                        { q: "Phillips Curve shows relation between:", o: ["Inflation and unemployment", "Growth and inflation", "Unemployment and growth", "Inflation and interest rates"], a: 0 }
-                    ]
-                },
-                micro: {
-                    title: "Microeconomics Quiz",
-                    questions: [
-                        { q: "Market equilibrium is where:", o: ["Supply = Demand", "Supply > Demand", "Supply < Demand", "Price is maximum"], a: 0 },
-                        { q: "Elasticity of demand measures:", o: ["Price change", "Quantity response to price", "Total revenue", "Cost"], a: 1 },
-                        { q: "Perfect competition has:", o: ["Few sellers", "Many sellers", "One seller", "Few buyers"], a: 1 },
-                        { q: "Consumer surplus is:", o: ["Price - Expense", "Maximum price - Actual price", "Actual price - Cost", "Total expenditure"], a: 1 },
-                        { q: "Marginal Utility theory by:", o: ["Marshall", "Smith", "Keynes", "Ricardo"], a: 0 }
-                    ]
-                },
-                upsc: {
-                    title: "UPSC Economics Quiz",
-                    questions: [
-                        { q: "Laffer Curve shows relation between:", o: ["Tax rate and revenue", "Growth and tax", "Inflation and tax", "Trade and tax"], a: 0 },
-                        { q: "Human Development Index includes:", o: ["Life expectancy, education, income", "GDP, CPI, GNP", "Trade balance, FDI", "Population, literacy"], a: 0 },
-                        { q: "Poverty line in India based on:", o: ["Calorie intake", "Income", "Consumption", "All of the above"], a: 3 },
-                        { q: "Lorenz Curve measures:", o: ["Income inequality", "Price inequality", "Wealth distribution", "Growth inequality"], a: 0 },
-                        { q: "Sustainable Development Goals (SDGs) by:", o: ["UN", "World Bank", "IMF", "WTO"], a: 0 }
-                    ]
-                },
-                rbi: {
-                    title: "RBI Grade B Quiz",
-                    questions: [
-                        { q: "Repo rate is:", o: ["Lending rate to banks", "Borrowing rate from banks", "Saving rate", "Deposit rate"], a: 0 },
-                        { q: "CRR stands for:", o: ["Cash Reserve Ratio", "Credit Risk Ratio", "Current Ratio", "Capital Requirement Ratio"], a: 0 },
-                        { q: "Monetary Policy Committee (MPC) has how many members?", o: ["3", "5", "7", "9"], a: 1 },
-                        { q: "SLR is maintained with:", o: ["RBI", "Government securities", "Commercial banks", "Cash"], a: 1 },
-                        { q: "Inflation targeting in India is:", o: ["2%", "4%", "6%", "8%"], a: 1 }
-                    ]
-                },
-                ugc: {
-                    title: "UGC NET Economics Quiz",
-                    questions: [
-                        { q: "Econometrics involves:", o: ["Statistics and economics", "Math and economics", "History and economics", "Philosophy and economics"], a: 0 },
-                        { q: "OLS is:", o: ["Ordinary Least Squares", "Optimal Linear Solution", "Ordinary Linear Solution", "Optimal Least Squares"], a: 0 },
-                        { q: "Autocorrelation is:", o: ["Positive correlation", "Correlation between errors", "Correlation between variables", "Negative correlation"], a: 1 },
-                        { q: "Time series analysis uses:", o: ["Static models", "Dynamic models", "Fixed models", "Random models"], a: 1 },
-                        { q: "Unit root test is:", o: ["ADF test", "T-test", "F-test", "Chi-square test"], a: 0 }
-                    ]
-                }
-            };
-
-            let currentQuiz = null;
-            let currentQuestion = 0;
-            let score = 0;
-
-            function startQuiz(type) {
-                currentQuiz = quizzes[type];
-                currentQuestion = 0;
-                score = 0;
-                document.getElementById('quizContainer').classList.remove('hidden');
-                document.getElementById('quizTitle').textContent = currentQuiz.title;
-                showQuestion();
-                document.getElementById('submitQuiz').style.display = 'block';
-                document.getElementById('resetQuiz').classList.add('hidden');
-                gsap.from('#quizContainer', {duration: 0.5, y: -20, opacity: 0, ease: "power2.out"});
-            }
-
-            function showQuestion() {
-                if (currentQuestion >= currentQuiz.questions.length) {
-                    finishQuiz();
-                    return;
-                }
-                const q = currentQuiz.questions[currentQuestion];
-                let html = `
-                    <div class="quiz-question">
-                        <h3 class="text-lg font-semibold mb-3">${currentQuestion + 1}. ${q.q}</h3>
-                        <div id="options">
-                `;
-                q.o.forEach((option, index) => {
-                    html += `
-                        <label class="quiz-option block p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                            <input type="radio" name="q${currentQuestion}" value="${index}" class="mr-3" required>
-                            ${option}
-                        </label>
-                    `;
-                });
-                html += '</div></div>';
-                document.getElementById('quizQuestions').innerHTML = html;
-            }
-
-            document.getElementById('submitQuiz').addEventListener('click', () => {
-                const selected = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
-                if (selected && parseInt(selected.value) === currentQuiz.questions[currentQuestion].a) {
-                    score++;
-                }
-                currentQuestion++;
-                if (currentQuestion < currentQuiz.questions.length) {
-                    showQuestion();
-                } else {
-                    finishQuiz();
-                }
-            });
-
-            function finishQuiz() {
-                const total = currentQuiz.questions.length;
-                const percent = (score / total) * 100;
-                let feedback = '';
-                if (percent >= 80) {
-                    feedback = 'Excellent! You have a strong grasp of the concepts.';
-                } else if (percent >= 60) {
-                    feedback = 'Good job! Review the areas you got wrong.';
-                } else {
-                    feedback = 'Keep practicing! More study needed.';
-                }
-                document.getElementById('quizResults').innerHTML = `
-                    <h3 class="text-xl font-bold mb-2">Results</h3>
-                    <p class="text-lg mb-2">Score: ${score} / ${total} (${percent.toFixed(1)}%)</p>
-                    <p class="text-gray-600">${feedback}</p>
-                `;
-                document.getElementById('quizResults').style.display = 'block';
-                document.getElementById('submitQuiz').style.display = 'none';
-                document.getElementById('resetQuiz').classList.remove('hidden');
-                localStorage.setItem(`${currentQuiz.title}_score`, score);
-            }
-
-            document.getElementById('resetQuiz').addEventListener('click', () => {
-                document.getElementById('quizContainer').classList.add('hidden');
-                currentQuiz = null;
-                currentQuestion = 0;
-                score = 0;
-                document.getElementById('quizQuestions').innerHTML = '';
-                document.getElementById('quizResults').style.display = 'none';
-            });
-        });
-    </script>
 
     <footer class="bg-gray-100 border-t border-gray-300 py-10 mt-16">
         <div class="container mx-auto px-4">
@@ -283,5 +95,118 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        let currentQuiz = null;
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+
+        // Load quizzes on page load
+        async function loadQuizzes() {
+            try {
+                const response = await fetch('/api/quizzes');
+                const quizzes = await response.json();
+                const quizList = document.getElementById('quiz-list');
+                quizList.innerHTML = quizzes.map(quiz => `
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow cursor-pointer" onclick="startQuiz(${quiz.id})">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2 font-serif">${quiz.title}</h3>
+                        <p class="text-gray-600 font-serif">${quiz.questions.length} questions • Multiple Choice</p>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Failed to load quizzes:', err);
+                document.getElementById('quiz-list').innerHTML = '<p class="text-center text-gray-500 col-span-full font-serif">No quizzes available. Contact admin to upload some.</p>';
+            }
+        }
+
+        function startQuiz(quizId) {
+            const quiz = currentQuiz = window.quizzes.find(q => q.id === quizId); // Assume quizzes loaded globally
+            if (!quiz) return;
+
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quiz.questions.length).fill(null);
+
+            document.getElementById('quiz-list').classList.add('hidden');
+            document.getElementById('quiz-interface').classList.remove('hidden');
+            document.getElementById('quiz-title').textContent = quiz.title;
+            document.getElementById('total-questions').textContent = quiz.questions.length;
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const quiz = currentQuiz;
+            if (!quiz) return;
+
+            const question = quiz.questions[currentQuestionIndex];
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = `
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 font-serif">${question.question}</h3>
+                    <div class="space-y-2">
+                        ${question.options.map((option, idx) => `
+                            <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="answer" value="${String.fromCharCode(65 + idx)}" class="mr-3" ${userAnswers[currentQuestionIndex] === String.fromCharCode(65 + idx) ? 'checked' : ''} onchange="selectAnswer('${String.fromCharCode(65 + idx)}')">
+                                <span class="font-serif">${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            updateNavigation();
+        }
+
+        function selectAnswer(answer) {
+            userAnswers[currentQuestionIndex] = answer;
+            updateNavigation();
+        }
+
+        function updateNavigation() {
+            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+            document.getElementById('next-btn').style.display = currentQuestionIndex === currentQuiz.questions.length - 1 ? 'none' : 'inline-block';
+            document.getElementById('submit-btn').style.display = currentQuestionIndex === currentQuiz.questions.length - 1 ? 'inline-block' : 'none';
+            document.getElementById('current-question').textContent = currentQuestionIndex + 1;
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuiz.questions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            const quiz = currentQuiz;
+            const correctAnswers = quiz.questions.map(q => q.correct).filter(Boolean);
+            const userCorrect = userAnswers.filter((ans, idx) => ans === correctAnswers[idx]).length;
+            const score = Math.round((userCorrect / correctAnswers.length) * 100);
+
+            document.getElementById('quiz-interface').classList.add('hidden');
+            document.getElementById('results').classList.remove('hidden');
+
+            document.getElementById('score').textContent = `${score}%`;
+            document.getElementById('score-text').textContent = `You got ${userCorrect} out of ${correctAnswers.length} correct.`;
+
+            // Optionally save score to DB via API if user logged in
+        }
+
+        // Load quizzes on page load
+        window.addEventListener('load', () => {
+            fetch('/api/quizzes')
+                .then(res => res.json())
+                .then(data => {
+                    window.quizzes = data;
+                    loadQuizzes();
+                })
+                .catch(err => console.error(err));
+        });
+    </script>
 </body>
 </html>
