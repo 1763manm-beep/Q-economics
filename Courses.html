@@ -130,14 +130,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             gsap.from('h1', {duration: 0.8, y: -30, opacity: 0, ease: "power2.out"});
-            gsap.from('.module-accordion', {
-                duration: 0.6, 
-                y: 50, 
-                opacity: 0, 
-                stagger: 0.15,
-                delay: 0.3,
-                ease: "power2.out"
-            });
+            // Early animation removed; will be called after content loads
 
             // Load courses dynamically
             async function loadCourses() {
@@ -150,18 +143,31 @@
                     courses.forEach(course => {
                         const accordion = document.createElement('div');
                         accordion.className = 'module-accordion';
+                        const lessons = JSON.parse(course.content || '{}').lessons || [];
+                        let lessonsHtml = '';
+                        lessons.forEach((lesson, index) => {
+                            const mediaHtml = lesson.media_url ? (lesson.media_url.includes('youtube.com') ? `<iframe class="w-full h-48 rounded-lg mb-4" src="${lesson.media_url}" frameborder="0" allowfullscreen></iframe>` : `<p class="text-sm text-gray-500 mb-2">Media: ${lesson.media_url}</p>`) : '';
+                            lessonsHtml += `
+                                <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                                    <h3 class="text-lg font-semibold text-gray-800 mb-2 cursor-pointer hover:text-blue-600" onclick="window.location.href='/course/${course.id}/lesson/${index}'">${lesson.title}</h3>
+                                    <p class="text-gray-600 mb-3">${lesson.content.substring(0, 150)}...</p>
+                                    ${lesson.key_points && lesson.key_points.length > 0 ? `<ul class="space-y-1 text-sm text-gray-600 mb-3">${lesson.key_points.map(point => `<li>• ${point}</li>`).join('')}</ul>` : ''}
+                                    ${mediaHtml}
+                                    <a href="/course/${course.id}/lesson/${index}" class="text-blue-600 hover:underline font-medium" target="_blank">Read Full Lesson →</a>
+                                </div>
+                            `;
+                        });
                         accordion.innerHTML = `
-                            <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" aria-expanded="false" aria-controls="course-${course.id}-content">
+                            <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" role="button" tabindex="0" aria-expanded="false" aria-controls="course-${course.id}-content">
                                 <h2 class="text-xl font-bold text-gray-800 flex justify-between items-center">
                                     <span>${course.module}</span>
-                                    <span class="text-sm text-gray-500">Click to expand</span>
+                                    <span class="text-sm text-gray-500">${lessons.length} lessons</span>
                                 </h2>
                             </div>
                             <div id="course-${course.id}-content" class="module-content">
                                 <div class="p-6 border-t">
-                                    <p class="text-gray-600 mb-4">Explore the fundamentals of ${course.module.toLowerCase()}.</p>
-                                    <a href="/course/${course.id}" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors font-serif inline-block">View Full Course</a>
-                                    ${course.notes_url ? `<a href="${course.notes_url}" class="ml-4 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded font-medium" download>Download Notes</a>` : ''}
+                                    ${lessonsHtml || `<p class="text-gray-600">No lessons available yet for ${course.module.toLowerCase()}.</p>`}
+                                    ${course.notes_url ? `<div class="mt-4 p-4 bg-blue-50 rounded-lg"><a href="${course.notes_url}" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors font-serif inline-block" download>Download Notes</a></div>` : ''}
                                 </div>
                             </div>
                         `;
@@ -169,10 +175,10 @@
                     });
                     if (courses.length === 0) {
                         container.innerHTML = '<p class="text-gray-600 text-center">No courses available. Contact admin to add courses.</p>';
-                    }
-                    setTimeout(() => {
+                    } else {
+                        // Animate after elements are added
                         gsap.from('.module-accordion', {duration: 0.6, y: 30, opacity: 0, stagger: 0.1, ease: "power2.out"});
-                    }, 100);
+                    }
                 } catch (error) {
                     console.error('Error loading courses:', error);
                     document.getElementById('coursesContainer').innerHTML = '<p class="text-red-500 text-center">Error loading courses. Please try again.</p>';
@@ -180,29 +186,34 @@
             }
             loadCourses();
 
-            // Search functionality
+            // Search functionality - enhanced to search lessons too
             document.getElementById('courseSearch').addEventListener('input', (e) => {
                 const query = e.target.value.toLowerCase();
                 const accordions = document.querySelectorAll('.module-accordion');
                 accordions.forEach(accordion => {
-                    const title = accordion.querySelector('h2').textContent.toLowerCase();
-                    if (title.includes(query)) {
-                        accordion.style.display = 'block';
-                    } else {
-                        accordion.style.display = 'none';
+                    const header = accordion.querySelector('h2 span:first-child').textContent.toLowerCase();
+                    const content = accordion.querySelector('.module-content');
+                    let match = header.includes(query);
+                    if (!match && content) {
+                        const lessons = content.querySelectorAll('h3');
+                        match = Array.from(lessons).some(lesson => lesson.textContent.toLowerCase().includes(query));
                     }
+                    accordion.style.display = match ? 'block' : 'none';
                 });
             });
 
             // Accordion
             window.toggleModule = function(element) {
                 const content = element.nextElementSibling;
+                if (!content) return;
                 const isActive = element.classList.contains('active');
                 element.classList.toggle('active');
                 content.classList.toggle('active');
                 element.setAttribute('aria-expanded', !isActive);
                 if (!isActive) {
-                    gsap.from(content.querySelectorAll('*'), {duration: 0.5, opacity: 0, y: 20, stagger: 0.1});
+                    gsap.from(content.querySelectorAll('*'), {duration: 0.5, opacity: 0, y: 20, stagger: 0.05, ease: "power2.out"});
+                } else {
+                    gsap.to(content, {duration: 0.3, height: 0, opacity: 0, ease: "power2.in"});
                 }
             }
 

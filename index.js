@@ -21,7 +21,7 @@ const lessonMediaUpload = multer({ dest: 'uploads/media/' });
 app.post('/admin/upload-lesson-media', lessonMediaUpload.single('media'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-    const mediaPath = `/media/${req.file.filename}`; // Serve as /media/filename
+    const mediaPath = `/media/${req.file.filename}`;
     res.json({ success: true, media_url: mediaPath });
   } catch (err) {
     console.error(err);
@@ -64,12 +64,24 @@ app.get('/about', (req, res) => {
   res.sendFile(path.join(__dirname, 'About.html'));
 });
 
-app.get('/course', (req, res) => {
+app.get('/course/:id', (req, res) => {
   res.sendFile(path.join(__dirname, 'Course.html'));
 });
 
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+app.get('/term/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'Term.html'));
+});
+
+app.get('/lesson/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'Lesson.html'));
+});
+
+app.get('/course/:courseId/lesson/:lessonIndex', (req, res) => {
+  res.sendFile(path.join(__dirname, 'Lesson.html'));
 });
 
 // Admin upload endpoint
@@ -335,7 +347,21 @@ app.put('/admin/terms/:id', async (req, res) => {
   }
 });
 
-// Courses APIs
+app.delete('/admin/terms/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query('DELETE FROM terms WHERE id = $1 RETURNING id', [parseInt(id)]);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Term not found' });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to delete term' });
+  }
+});
+
+// Courses management APIs
 app.get('/api/courses', async (req, res) => {
   try {
     const { rows } = await pool.query('SELECT * FROM courses ORDER BY id ASC');
@@ -360,7 +386,6 @@ app.get('/api/courses/:id', async (req, res) => {
   }
 });
 
-// Courses Admin APIs
 app.post('/admin/courses', async (req, res) => {
   try {
     const { module, content, notes_url } = req.body;
@@ -413,25 +438,7 @@ app.delete('/admin/courses/:id', async (req, res) => {
   }
 });
 
-app.delete('/admin/terms/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await pool.query('DELETE FROM terms WHERE id = $1 RETURNING id', [parseInt(id)]);
-    if (result.rowCount === 0) {
-      return res.status(404).json({ error: 'Term not found' });
-    }
-    res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to delete term' });
-  }
-});
-
 // Listen
-app.get('/term/:id', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Term.html'));
-});
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
