@@ -92,7 +92,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             gsap.from('h1', {duration: 0.8, y: -30, opacity: 0, ease: "power2.out"});
             gsap.from('#searchInput', {duration: 0.8, y: 30, opacity: 0, delay: 0.3, ease: "back.out(1.7)"});
-            gsap.from('#results > div', {
+            gsap.from('#results .bg-white', {
                 duration: 0.6, 
                 y: 50, 
                 opacity: 0, 
@@ -133,7 +133,7 @@
                 resultsDiv.innerHTML = html;
                 
                 // Animate results in
-                gsap.from('#results > div', {
+                gsap.from('#results .bg-white', {
                     duration: 0.6, 
                     y: 30, 
                     opacity: 0, 
@@ -203,7 +203,7 @@
                         resultsDiv.innerHTML = html;
                         
                         // Animate results in
-                        gsap.from('#results > div', {
+                        gsap.from('#results .bg-white', {
                             duration: 0.6, 
                             y: 30, 
                             opacity: 0, 
