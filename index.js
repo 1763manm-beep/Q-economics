@@ -141,7 +141,17 @@ app.post('/admin/upload', upload.single('quizFile'), async (req, res) => {
 app.get('/api/quizzes', async (req, res) => {
   try {
     const { rows } = await pool.query('SELECT id, title, type, questions, created_at FROM quizzes ORDER BY id DESC');
-    res.json(rows.map(row => ({ ...row, questions: JSON.parse(row.questions) })));
+    res.json(rows.map(row => {
+      let questions = [];
+      if (row.questions) {
+        try {
+          questions = JSON.parse(row.questions);
+        } catch (e) {
+          console.warn('Invalid JSON for quiz ' + row.id + ': ' + row.questions);
+        }
+      }
+      return { ...row, questions };
+    }));
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to fetch quizzes' });
