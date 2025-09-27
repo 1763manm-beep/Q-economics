@@ -143,14 +143,15 @@
                     courses.forEach(course => {
                         const accordion = document.createElement('div');
                         accordion.className = 'module-accordion';
-                        const lessons = JSON.parse(course.content || '{}').lessons || [];
+                        const contentObj = course.content || {};
+                        const lessons = contentObj.lessons || [];
                         let lessonsHtml = '';
                         lessons.forEach((lesson, index) => {
                             const mediaHtml = lesson.media_url ? (lesson.media_url.includes('youtube.com') ? `<iframe class="w-full h-48 rounded-lg mb-4" src="${lesson.media_url}" frameborder="0" allowfullscreen></iframe>` : `<p class="text-sm text-gray-500 mb-2">Media: ${lesson.media_url}</p>`) : '';
                             lessonsHtml += `
                                 <div class="mb-6 p-4 bg-gray-50 rounded-lg">
                                     <h3 class="text-lg font-semibold text-gray-800 mb-2 cursor-pointer hover:text-blue-600" onclick="window.location.href='/course/${course.id}/lesson/${index}'">${lesson.title}</h3>
-                                    <p class="text-gray-600 mb-3">${lesson.content.substring(0, 150)}...</p>
+                                    <p class="text-gray-600 mb-3">${lesson.content ? lesson.content.substring(0, 150) + '...' : 'No content available.'}</p>
                                     ${lesson.key_points && lesson.key_points.length > 0 ? `<ul class="space-y-1 text-sm text-gray-600 mb-3">${lesson.key_points.map(point => `<li>• ${point}</li>`).join('')}</ul>` : ''}
                                     ${mediaHtml}
                                     <a href="/course/${course.id}/lesson/${index}" class="text-blue-600 hover:underline font-medium" target="_blank">Read Full Lesson →</a>
