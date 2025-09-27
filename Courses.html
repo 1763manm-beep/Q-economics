@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - Q-Economics</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="Style.css">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+        }
+        
+        .font-serif {
+            font-family: 'Georgia', serif;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        .flashcard { perspective: 1000px; }
+        .flashcard-inner { transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
+        .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back { backface-visibility: hidden; position: absolute; width: 100%; }
+        .flashcard-back { transform: rotateY(180deg); }
+        .module-accordion { overflow: hidden; }
+        .module-content { max-height: 0; transition: max-height 0.3s ease-out; }
+        .module-accordion.active .module-content { max-height: 1000px; }
+        .graph-container { position: relative; height: 400px; width: 100%; }
+        [data-lang="hi"] { display: none; }
+        .lang-en [data-lang="hi"] { display: none; }
+        .lang-hi [data-lang="en"] { display: none; }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+    </style>
+</head>
+<body class="bg-gray-100 lang-en">
+    <nav class="bg-white border-b border-gray-300 py-4">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
+            <a href="/" class="text-2xl font-serif font-bold text-gray-900 mb-4 md:mb-0 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-3 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                Q-Economics
+            </a>
+            <div class="flex flex-wrap justify-center gap-4 md:gap-6">
+                <a href="/" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">Home</a>
+                <a href="/courses" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">Courses</a>
+                <a href="/search" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">Search</a>
+                <a href="/testseries" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">Test Series</a>
+                <a href="/careers" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">Careers</a>
+                <a href="/research" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">Research</a>
+                <a href="/about" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">About</a>
+                <button onclick="toggleLanguage()" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif" aria-label="Toggle language">हिंदी/English</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-8 font-serif">Structured Curriculum</h1>
+        
+        <!-- Modules -->
+        <div class="space-y-6 mb-8">
+            <div class="module-accordion">
+                <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" aria-expanded="false" aria-controls="micro-content">
+                    <h2 class="text-xl font-bold text-gray-800 flex justify-between items-center">
+                        Microeconomics <span class="text-sm text-gray-500">Click to expand</span>
+                    </h2>
+                </div>
+                <div id="micro-content" class="module-content">
+                    <div class="p-6 border-t">
+                        <p class="text-gray-600 mb-4">Study of individual economic units and markets.</p>
+                        <ul class="space-y-2 mb-4">
+                            <li><a href="/courses/supply-demand.html" class="text-blue-600 hover:underline">Supply & Demand</a></li>
+                            <li><a href="/courses/consumer-theory.html" class="text-blue-600 hover:underline">Consumer Theory</a></li>
+                            <li><a href="/courses/market-structures.html" class="text-blue-600 hover:underline">Market Structures</a></li>
+                        </ul>
+                        <a href="assets/notes/micro-summary.pdf" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded font-medium" download>Download Notes (PDF)</a>
+                        <div class="flashcard mt-4">
+                            <div class="flashcard-inner">
+                                <div class="flashcard-front bg-white p-4 border rounded-lg shadow cursor-pointer" onclick="flipCard(this)">
+                                    <h4 class="font-bold">Elasticity of Demand</h4>
+                                </div>
+                                <div class="flashcard-back bg-blue-50 p-4 border rounded-lg shadow">
+                                    <h4 class="font-bold text-blue-800">Definition</h4>
+                                    <p class="text-sm text-gray-600">Measure of responsiveness of quantity demanded to change in price.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-accordion">
+                <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" aria-expanded="false" aria-controls="macro-content">
+                    <h2 class="text-xl font-bold text-gray-800 flex justify-between items-center">
+                        Macroeconomics <span class="text-sm text-gray-500">Click to expand</span>
+                    </h2>
+                </div>
+                <div id="macro-content" class="module-content">
+                    <div class="p-6 border-t">
+                        <p class="text-gray-600 mb-4">Study of national and global economic systems.</p>
+                        <ul class="space-y-2 mb-4">
+                            <li><a href="/courses/gdp.html" class="text-blue-600 hover:underline">GDP</a></li>
+                            <li><a href="/courses/inflation.html" class="text-blue-600 hover:underline">Inflation</a></li>
+                            <li><a href="/courses/monetary-policy.html" class="text-blue-600 hover:underline">Monetary Policy</a></li>
+                        </ul>
+                        <a href="assets/notes/macro-formulas.pdf" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded font-medium" download>Download Formula Sheet</a>
+                        <div class="mt-4">
+                            <h4 class="font-bold mb-2">Video Lecture</h4>
+                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/your-macro-video-id" title="Macroeconomics Lecture" frameborder="0" allowfullscreen aria-label="Macroeconomics video lecture"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-accordion">
+                <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" aria-expanded="false" aria-controls="econometrics-content">
+                    <h2 class="text-xl font-bold text-gray-800 flex justify-between items-center">
+                        Econometrics <span class="text-sm text-gray-500">Click to expand</span>
+                    </h2>
+                </div>
+                <div id="econometrics-content" class="module-content">
+                    <div class="p-6 border-t">
+                        <p class="text-gray-600 mb-4">Application of statistical methods to economic data.</p>
+                        <ul class="space-y-2 mb-4">
+                            <li><a href="/courses/regression.html" class="text-blue-600 hover:underline">Regression Analysis</a></li>
+                            <li><a href="/courses/time-series.html" class="text-blue-600 hover:underline">Time Series</a></li>
+                            <li><a href="/courses/hypothesis-testing.html" class="text-blue-600 hover:underline">Hypothesis Testing</a></li>
+                        </ul>
+                        <a href="assets/notes/econometrics-latex.tex" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded font-medium" download>Download LaTeX Template</a>
+                        <audio controls class="mt-4 w-full">
+                            <source src="assets/audio/econometrics-intro.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-accordion">
+                <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" aria-expanded="false" aria-controls="development-content">
+                    <h2 class="text-xl font-bold text-gray-800 flex justify-between items-center">
+                        Development Economics <span class="text-sm text-gray-500">Click to expand</span>
+                    </h2>
+                </div>
+                <div id="development-content" class="module-content">
+                    <div class="p-6 border-t">
+                        <p class="text-gray-600 mb-4">Study of economic development in low-income countries.</p>
+                        <ul class="space-y-2 mb-4">
+                            <li><a href="/courses/poverty-inequality.html" class="text-blue-600 hover:underline">Poverty and Inequality</a></li>
+                            <li><a href="/courses/human-capital.html" class="text-blue-600 hover:underline">Human Capital</a></li>
+                            <li><a href="/courses/development-policy.html" class="text-blue-600 hover:underline">Development Policy</a></li>
+                        </ul>
+                        <a href="assets/notes/development-case-studies.pdf" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded font-medium" download>Download Case Studies</a>
+                        <div class="flashcard mt-4">
+                            <div class="flashcard-inner">
+                                <div class="flashcard-front bg-white p-4 border rounded-lg shadow cursor-pointer" onclick="flipCard(this)">
+                                    <h4 class="font-bold">Gini Coefficient</h4>
+                                </div>
+                                <div class="flashcard-back bg-green-50 p-4 border rounded-lg shadow">
+                                    <h4 class="font-bold text-green-800">Definition</h4>
+                                    <p class="text-sm text-gray-600">Measures income or wealth distribution, 0 for perfect equality, 1 for perfect inequality.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-accordion">
+                <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" aria-expanded="false" aria-controls="finance-content">
+                    <h2 class="text-xl font-bold text-gray-800 flex justify-between items-center">
+                        Finance <span class="text-sm text-gray-500">Click to expand</span>
+                    </h2>
+                </div>
+                <div id="finance-content" class="module-content">
+                    <div class="p-6 border-t">
+                        <p class="text-gray-600 mb-4">Financial economics and markets.</p>
+                        <ul class="space-y-2 mb-4">
+                            <li><a href="/courses/capital-markets.html" class="text-blue-600 hover:underline">Capital Markets</a></li>
+                            <li><a href="/courses/risk-management.html" class="text-blue-600 hover:underline">Risk Management</a></li>
+                            <li><a href="/courses/financial-instruments.html" class="text-blue-600 hover:underline">Financial Instruments</a></li>
+                        </ul>
+                        <a href="assets/notes/finance-formulas.pdf" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded font-medium" download>Download Formula Sheet</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Graph -->
+        <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 font-serif">Interactive Supply-Demand Graph</h2>
+            <p class="text-gray-600 mb-4">Adjust price to see how supply and demand intersect.</p>
+            <div class="flex mb-4">
+                <label class="mr-4">Price: <input type="range" id="priceSlider" min="1" max="10" value="5" class="w-32" aria-label="Adjust price"></label>
+                <label>Quantity: <span id="quantityValue">50</span></label>
+            </div>
+            <div class="graph-container">
+                <canvas id="supplyDemandChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Textbook Companions -->
+        <div class="bg-white rounded-xl p-8 shadow-lg">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 font-serif">Textbook Companions</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="border rounded-lg p-6">
+                    <h3 class="text-xl font-bold mb-3">Mankiw's Principles of Economics</h3>
+                    <p class="text-gray-600 mb-4">Simplified explanations of core micro and macro concepts.</p>
+                    <ul class="space-y-1 text-sm text-gray-600">
+                        <li>• Chapter summaries</li>
+                        <li>• Key graphs</li>
+                        <li>• Practice problems</li>
+                    </ul>
+                    <a href="assets/notes/mankiw-companion.pdf" class="inline-block bg-blue-600 text-white px-4 py-2 rounded mt-4 hover:bg-blue-700 transition-colors" download aria-label="Download Mankiw Companion">Download Companion</a>
+                </div>
+                <div class="border rounded-lg p-6">
+                    <h3 class="text-xl font-bold mb-3">Varian's Intermediate Microeconomics</h3>
+                    <p class="text-gray-600 mb-4">Advanced consumer and producer theory.</p>
+                    <ul class="space-y-1 text-sm text-gray-600">
+                        <li>• Math derivations</li>
+                        <li>• Game theory basics</li>
+                        <li>• Exercises</li>
+                    </ul>
+                    <a href="assets/notes/varian-companion.pdf" class="inline-block bg-blue-600 text-white px-4 py-2 rounded mt-4 hover:bg-blue-700 transition-colors" download aria-label="Download Varian Companion">Download Companion</a>
+                </div>
+                <div class="border rounded-lg p-6">
+                    <h3 class="text-xl font-bold mb-3">Gujarati's Basic Econometrics</h3>
+                    <p class="text-gray-600 mb-4">Introduction to regression and statistical methods.</p>
+                    <ul class="space-y-1 text-sm text-gray-600">
+                        <li>• Model assumptions</li>
+                        <li>• Data interpretation</li>
+                        <li>• Software guides</li>
+                    </ul>
+                    <a href="assets/notes/gujarati-companion.pdf" class="inline-block bg-blue-600 text-white px-4 py-2 rounded mt-4 hover:bg-blue-700 transition-colors" download aria-label="Download Gujarati Companion">Download Companion</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.from('h1', {duration: 0.8, y: -30, opacity: 0, ease: "power2.out"});
+            gsap.from('.module-accordion', {
+                duration: 0.6, 
+                y: 50, 
+                opacity: 0, 
+                stagger: 0.15,
+                delay: 0.3,
+                ease: "power2.out"
+            });
+
+            // Accordion
+            function toggleModule(element) {
+                const content = element.nextElementSibling;
+                const isActive = element.classList.contains('active');
+                element.classList.toggle('active');
+                content.classList.toggle('active');
+                element.setAttribute('aria-expanded', !isActive);
+                if (!isActive) {
+                    gsap.from(content.querySelectorAll('*'), {duration: 0.5, opacity: 0, y: 20, stagger: 0.1});
+                }
+            }
+
+            // Flashcard flip
+            function flipCard(element) {
+                element.parentElement.parentElement.classList.toggle('flipped');
+            }
+
+            // Multilingual toggle
+            function toggleLanguage() {
+                const body = document.body;
+                if (body.classList.contains('lang-en')) {
+                    body.classList.remove('lang-en');
+                    body.classList.add('lang-hi');
+                    document.querySelector('button[onclick="toggleLanguage()"]').textContent = 'English/हिंदी';
+                } else {
+                    body.classList.remove('lang-hi');
+                    body.classList.add('lang-en');
+                    document.querySelector('button[onclick="toggleLanguage()"]').textContent = 'हिंदी/English';
+                }
+            }
+
+            // Supply-Demand Graph
+            const ctx = document.getElementById('supplyDemandChart').getContext('2d');
+            let chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [1,2,3,4,5,6,7,8,9,10],
+                    datasets: [
+                        {
+                            label: 'Demand',
+                            data: [100, 90, 80, 70, 60, 50, 40, 30, 20, 10],
+                            borderColor: 'rgb(239, 68, 68)',
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Supply',
+                            data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                            borderColor: 'rgb(16, 185, 129)',
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Quantity' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Price' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: true }
+                    }
+                }
+            });
+
+            document.getElementById('priceSlider').addEventListener('input', (e) => {
+                const price = e.target.value;
+                document.getElementById('quantityValue').textContent = price * 10;
+                // Update demand curve (inverse to price)
+                const demandData = Array.from({length: 10}, (_, i) => 100 - price * 10 + i * 10);
+                // Update supply curve (direct to price)
+                const supplyData = Array.from({length: 10}, (_, i) => price * 10 + i * 10);
+                chart.data.datasets[0].data = demandData;
+                chart.data.datasets[1].data = supplyData;
+                chart.update();
+            });
+        });
+    </script>
+
+    <footer class="bg-gray-100 border-t border-gray-300 py-10 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div>
+                    <h3 class="text-lg font-serif font-semibold text-gray-900 mb-4">Q-Economics</h3>
+                    <p data-lang="en" class="text-gray-700 font-serif active">Making economic research accessible to everyone.</p>
+                    <p data-lang="hi" class="text-gray-700 font-serif">आर्थिक अनुसंधान को सभी के लिए सुलभ बनाना.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-serif font-semibold text-gray-900 mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="/" class="text-gray-700 hover:text-gray-900 transition-colors font-serif">Home</a></li>
+                        <li><a href="/search" class="text-gray-700 hover:text-gray-900 transition-colors font-serif">Search</a></li>
+                        <li><a href="/about" class="text-gray-700 hover:text-gray-900 transition-colors font-serif">About</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-serif font-semibold text-gray-900 mb-4">Contact</h3>
+                    <p class="text-gray-700 font-serif">Email: info@q-economics.com</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-300 mt-10 pt-6 text-center text-gray-600 font-serif">
+                <p>&copy; 2023 Q-Economics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
