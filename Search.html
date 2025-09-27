@@ -95,8 +95,54 @@
                 ease: "power2.out"
             });
 
-            document.getElementById('searchBtn').addEventListener('click', async () => {
-                const query = document.getElementById('searchInput').value;
+            // Load initial terms on page load
+            async function loadInitialTerms() {
+                const resultsDiv = document.getElementById('results');
+                const response = await fetch('/api/terms');
+                if (!response.ok) {
+                    console.error('Failed to load initial terms');
+                    return;
+                }
+                const results = await response.json();
+                if (results.length === 0) {
+                    resultsDiv.innerHTML = `
+                        <div class="col-span-2 text-center py-8">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">No terms available</h3>
+                            <p class="text-gray-600">The knowledge hub is empty. Contact admin to add terms.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                let html = '';
+                results.slice(0, 8).forEach(item => {
+                    html += `
+                        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-l-4 border-blue-500">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">${escapeHtml(item.term)}</h3>
+                            <p class="text-gray-600">${escapeHtml(item.description)}</p>
+                        </div>
+                    `;
+                });
+                resultsDiv.innerHTML = html;
+                
+                // Animate results in
+                gsap.from('#results > div', {
+                    duration: 0.6, 
+                    y: 30, 
+                    opacity: 0, 
+                    stagger: 0.1,
+                    ease: "power2.out"
+                });
+            }
+            loadInitialTerms();
+
+            // Search functionality
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            
+            function handleSearch() {
+                const query = searchInput.value.trim();
+                if (!query) return;
+                
                 const resultsDiv = document.getElementById('results');
                 
                 // Animation when searching
@@ -162,6 +208,14 @@
                         `;
                     }
                 }, 1500);
+            }
+            
+            searchBtn.addEventListener('click', handleSearch);
+            
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleSearch();
+                }
             });
         });
 
@@ -170,7 +224,6 @@
             div.textContent = text;
             return div.innerHTML;
         }
-    </script>
     </script>
 
     <footer class="bg-gray-100 border-t border-gray-300 py-10 mt-16">
