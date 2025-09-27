@@ -248,11 +248,32 @@ app.delete('/admin/quiz/:id/question/:qIndex', async (req, res) => {
 // Terms management APIs
 app.get('/api/terms', async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM terms ORDER BY term ASC');
+    let sql = 'SELECT * FROM terms';
+    let values = [];
+    if (req.query.q) {
+      sql += ' WHERE term ILIKE $1';
+      values.push(`%${req.query.q}%`);
+    }
+    sql += ' ORDER BY term ASC';
+    const { rows } = await pool.query(sql, values);
     res.json(rows);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to fetch terms' });
+  }
+});
+
+app.get('/api/terms/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rows } = await pool.query('SELECT * FROM terms WHERE id = $1', [parseInt(id)]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Term not found' });
+    }
+    res.json(rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch term' });
   }
 });
 
@@ -317,6 +338,10 @@ app.delete('/admin/terms/:id', async (req, res) => {
 });
 
 // Listen
+app.get('/term/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'Term.html'));
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

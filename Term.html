@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Term Details - Q-Economics</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="Style.css">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+        }
+        
+        .font-serif {
+            font-family: 'Georgia', serif;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-white border-b border-gray-300 py-4">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
+            <a href="/" class="text-2xl font-serif font-bold text-gray-900 mb-4 md:mb-0 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-3 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                Q-Economics
+            </a>
+            <div class="flex flex-wrap justify-center gap-4 md:gap-6">
+                <a href="/" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">Home</a>
+                <a href="/courses" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">Courses</a>
+                <a href="/search" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">Search</a>
+                <a href="/testseries" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">Test Series</a>
+                <a href="/careers" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">Careers</a>
+                <a href="/research" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">Research</a>
+                <a href="/about" class="text-gray-700 font-medium hover:text-gray-900 transition-colors font-serif">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 mt-8">
+        <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl shadow-xl p-8 max-w-4xl mx-auto">
+            <a href="/search" class="inline-block mb-4 text-blue-600 hover:text-blue-800 font-medium font-serif">&larr; Back to Search</a>
+            <h1 id="termTitle" class="text-4xl font-bold text-gray-800 mb-4 text-center animate__animated animate__fadeIn font-serif">Loading...</h1>
+            <div id="termContent" class="text-lg text-gray-700 leading-relaxed font-serif animate__animated animate__fadeIn">
+                Loading term details...
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.from('h1', {duration: 0.8, y: -30, opacity: 0, ease: "power2.out"});
+            
+            // Extract term ID from URL
+            const path = window.location.pathname;
+            const idMatch = path.match(/\/term\/(\d+)/);
+            if (!idMatch) {
+                document.getElementById('termTitle').textContent = 'Term not found';
+                document.getElementById('termContent').innerHTML = '<p class="text-center text-red-500">Invalid term ID. <a href="/search">Go back to search</a>.</p>';
+                return;
+            }
+            
+            const termId = parseInt(idMatch[1]);
+            
+            // Fetch term details
+            async function loadTermDetails() {
+                try {
+                    const response = await fetch(`/api/terms/${termId}`);
+                    if (!response.ok) {
+                        throw new Error('Term not found');
+                    }
+                    const term = await response.json();
+                    
+                    document.getElementById('termTitle').textContent = term.term;
+                    document.getElementById('termContent').innerHTML = `
+                        <p class="mb-6">${term.description}</p>
+                        <div class="text-center">
+                            <a href="/search" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-serif">Back to Search</a>
+                        </div>
+                    `;
+                } catch (error) {
+                    document.getElementById('termTitle').textContent = 'Term not found';
+                    document.getElementById('termContent').innerHTML = `<p class="text-center text-red-500">Error loading term: ${error.message}. <a href="/search">Go back to search</a>.</p>`;
+                }
+            }
+            
+            loadTermDetails();
+        });
+    </script>
+
+    <footer class="bg-gray-100 border-t border-gray-300 py-10 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div>
+                    <h3 class="text-lg font-serif font-semibold text-gray-900 mb-4">Q-Economics</h3>
+                    <p class="text-gray-700 font-serif">Making economic research accessible to everyone.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-serif font-semibold text-gray-900 mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="/" class="text-gray-700 hover:text-gray-900 transition-colors font-serif">Home</a></li>
+                        <li><a href="/search" class="text-gray-700 hover:text-gray-900 transition-colors font-serif">Search</a></li>
+                        <li><a href="/about" class="text-gray-700 hover:text-gray-900 transition-colors font-serif">About</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-serif font-semibold text-gray-900 mb-4">Contact</h3>
+                    <p class="text-gray-700 font-serif">Email: info@q-economics.com</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-300 mt-10 pt-6 text-center text-gray-600 font-serif">
+                <p>&copy; 2023 Q-Economics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

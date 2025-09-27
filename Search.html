@@ -116,10 +116,12 @@
                 let html = '';
                 results.slice(0, 8).forEach(item => {
                     html += `
-                        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-l-4 border-blue-500">
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">${escapeHtml(item.term)}</h3>
-                            <p class="text-gray-600">${escapeHtml(item.description)}</p>
-                        </div>
+                        <a href="/term/${item.id}" target="_blank" class="block">
+                            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-l-4 border-blue-500 cursor-pointer">
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">${escapeHtml(item.term)}</h3>
+                                <p class="text-gray-600">${escapeHtml(item.description)}</p>
+                            </div>
+                        </a>
                     `;
                 });
                 resultsDiv.innerHTML = html;
@@ -183,10 +185,12 @@
                         let html = '';
                         results.forEach(item => {
                             html += `
-                                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-l-4 border-blue-500 animate__animated animate__fadeIn">
-                                    <h3 class="text-xl font-bold text-gray-800 mb-2">${escapeHtml(item.term)}</h3>
-                                    <p class="text-gray-600">${escapeHtml(item.description)}</p>
-                                </div>
+                                <a href="/term/${item.id}" target="_blank" class="block">
+                                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-l-4 border-blue-500 animate__animated animate__fadeIn cursor-pointer">
+                                        <h3 class="text-xl font-bold text-gray-800 mb-2">${escapeHtml(item.term)}</h3>
+                                        <p class="text-gray-600">${escapeHtml(item.description)}</p>
+                                    </div>
+                                </a>
                             `;
                         });
                         
