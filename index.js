@@ -82,7 +82,9 @@ app.post('/admin/upload', upload.single('quizFile'), async (req, res) => {
     }
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+
+    console.log('Parsed jsonData:', JSON.stringify(jsonData.slice(0, 3), null, 2)); // Log first few rows for debug
 
     if (jsonData.length < 2) {
       return res.status(400).json({ error: 'No data in file' });
@@ -103,18 +105,18 @@ app.post('/admin/upload', upload.single('quizFile'), async (req, res) => {
     const questions = [];
     for (let i = 1; i < jsonData.length; i++) {
       const row = jsonData[i];
-      const question = row[questionIndex];
+      const question = row[questionIndex]?.toString().trim();
       if (question) {
-        const correct = row[correctIndex];
+        const correct = row[correctIndex]?.toString().toUpperCase().trim();
         const q = {
           question,
           options: [
-            row[optA] || '',
-            row[optB] || '',
-            row[optC] || '',
-            row[optD] || ''
+            row[optA]?.toString().trim() || '',
+            row[optB]?.toString().trim() || '',
+            row[optC]?.toString().trim() || '',
+            row[optD]?.toString().trim() || ''
           ],
-          correct: correct ? correct.toUpperCase() : ''
+          correct: correct || 'A'
         };
         questions.push(q);
       }
@@ -134,13 +136,12 @@ app.post('/admin/upload', upload.single('quizFile'), async (req, res) => {
     const result = await pool.query(query, values);
 
     // Clean up temp file
-    const fs = require('fs');
     fs.unlinkSync(req.file.path);
 
     res.json({ success: true, questionsCount: questions.length, quizId: result.rows[0].id });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error during upload' });
+    console.error('Upload error details:', err);
+    res.status(500).json({ error: 'Server error during upload: ' + err.message });
   }
 });
 
