@@ -83,6 +83,82 @@ async function initDB() {
       ON CONFLICT (id) DO NOTHING;
     `);
 
+    // Insert sample courses
+    await pool.query(`
+      INSERT INTO courses (module, content, notes_url) VALUES 
+      ('Microeconomics', '{
+        "lessons": [
+          {
+            "title": "Supply and Demand",
+            "content": "The intersection of supply and demand curves determines the market clearing price.",
+            "key_points": ["Law of Demand: Inverse relationship", "Law of Supply: Direct relationship", "Equilibrium: Where curves meet"]
+          },
+          {
+            "title": "Elasticity",
+            "content": "Measures responsiveness of quantity to price changes.",
+            "key_points": ["Price Elasticity", "Income Elasticity", "Cross Elasticity"]
+          }
+        ]
+      }', 'assets/notes/micro.pdf'),
+      ('Macroeconomics', '{
+        "lessons": [
+          {
+            "title": "GDP and Measurement",
+            "content": "Gross Domestic Product measures the value of goods and services produced.",
+            "key_points": ["Nominal vs Real GDP", "Expenditure Approach", "Income Approach"]
+          },
+          {
+            "title": "Inflation",
+            "content": "Rise in general price level reduces purchasing power.",
+            "key_points": ["CPI", "PPI", "Hyperinflation"]
+          }
+        ]
+      }', 'assets/notes/macro.pdf'),
+      ('Econometrics', '{
+        "lessons": [
+          {
+            "title": "Regression Analysis",
+            "content": "Statistical method to estimate relationship between variables.",
+            "key_points": ["OLS", "R-squared", "Assumptions"]
+          },
+          {
+            "title": "Hypothesis Testing",
+            "content": "Determine if results are statistically significant.",
+            "key_points": ["p-value", "t-test", "F-test"]
+          }
+        ]
+      }', 'assets/notes/econometrics.pdf'),
+      ('Development Economics', '{
+        "lessons": [
+          {
+            "title": "Poverty and Inequality",
+            "content": "Analysis of economic disparities and development challenges.",
+            "key_points": ["Gini Coefficient", "Poverty Trap", "Inequality Measures"]
+          },
+          {
+            "title": "Human Capital Theory",
+            "content": "Investment in education and health for economic growth.",
+            "key_points": ["Becker's Model", "Returns to Education", "Health Economics"]
+          }
+        ]
+      }', 'assets/notes/development.pdf'),
+      ('Finance', '{
+        "lessons": [
+          {
+            "title": "Capital Markets",
+            "content": "Markets for long-term funding, including stocks and bonds.",
+            "key_points": ["Stock Markets", "Bond Markets", "CAPM"]
+          },
+          {
+            "title": "Risk Management",
+            "content": "Strategies to identify and mitigate financial risks.",
+            "key_points": ["VaR", "Hedging", "Derivatives"]
+          }
+        ]
+      }', 'assets/notes/finance.pdf')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+
     console.log('Database initialized successfully.');
   } catch (err) {
     console.error('Database initialization error:', err);

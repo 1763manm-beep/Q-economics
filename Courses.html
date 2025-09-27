@@ -62,138 +62,22 @@
     </nav>
 
     <main class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold text-gray-800 mb-8 font-serif">Structured Curriculum</h1>
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-4xl font-bold text-gray-800 font-serif">Structured Curriculum</h1>
+            <div class="relative">
+                <input type="text" id="courseSearch" placeholder="Search courses..." class="pl-10 pr-4 py-2 border rounded-lg w-64 focus:ring-2 focus:ring-blue-500">
+                <svg class="absolute left-3 top-3 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+        </div>
         
-        <!-- Modules -->
-        <div class="space-y-6 mb-8">
-            <div class="module-accordion">
-                <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" aria-expanded="false" aria-controls="micro-content">
-                    <h2 class="text-xl font-bold text-gray-800 flex justify-between items-center">
-                        Microeconomics <span class="text-sm text-gray-500">Click to expand</span>
-                    </h2>
-                </div>
-                <div id="micro-content" class="module-content">
-                    <div class="p-6 border-t">
-                        <p class="text-gray-600 mb-4">Study of individual economic units and markets.</p>
-                        <ul class="space-y-2 mb-4">
-                            <li><a href="/courses/supply-demand.html" class="text-blue-600 hover:underline">Supply & Demand</a></li>
-                            <li><a href="/courses/consumer-theory.html" class="text-blue-600 hover:underline">Consumer Theory</a></li>
-                            <li><a href="/courses/market-structures.html" class="text-blue-600 hover:underline">Market Structures</a></li>
-                        </ul>
-                        <a href="assets/notes/micro-summary.pdf" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded font-medium" download>Download Notes (PDF)</a>
-                        <div class="flashcard mt-4">
-                            <div class="flashcard-inner">
-                                <div class="flashcard-front bg-white p-4 border rounded-lg shadow cursor-pointer" onclick="flipCard(this)">
-                                    <h4 class="font-bold">Elasticity of Demand</h4>
-                                </div>
-                                <div class="flashcard-back bg-blue-50 p-4 border rounded-lg shadow">
-                                    <h4 class="font-bold text-blue-800">Definition</h4>
-                                    <p class="text-sm text-gray-600">Measure of responsiveness of quantity demanded to change in price.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="module-accordion">
-                <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" aria-expanded="false" aria-controls="macro-content">
-                    <h2 class="text-xl font-bold text-gray-800 flex justify-between items-center">
-                        Macroeconomics <span class="text-sm text-gray-500">Click to expand</span>
-                    </h2>
-                </div>
-                <div id="macro-content" class="module-content">
-                    <div class="p-6 border-t">
-                        <p class="text-gray-600 mb-4">Study of national and global economic systems.</p>
-                        <ul class="space-y-2 mb-4">
-                            <li><a href="/courses/gdp.html" class="text-blue-600 hover:underline">GDP</a></li>
-                            <li><a href="/courses/inflation.html" class="text-blue-600 hover:underline">Inflation</a></li>
-                            <li><a href="/courses/monetary-policy.html" class="text-blue-600 hover:underline">Monetary Policy</a></li>
-                        </ul>
-                        <a href="assets/notes/macro-formulas.pdf" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded font-medium" download>Download Formula Sheet</a>
-                        <div class="mt-4">
-                            <h4 class="font-bold mb-2">Video Lecture</h4>
-                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/your-macro-video-id" title="Macroeconomics Lecture" frameborder="0" allowfullscreen aria-label="Macroeconomics video lecture"></iframe>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="module-accordion">
-                <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" aria-expanded="false" aria-controls="econometrics-content">
-                    <h2 class="text-xl font-bold text-gray-800 flex justify-between items-center">
-                        Econometrics <span class="text-sm text-gray-500">Click to expand</span>
-                    </h2>
-                </div>
-                <div id="econometrics-content" class="module-content">
-                    <div class="p-6 border-t">
-                        <p class="text-gray-600 mb-4">Application of statistical methods to economic data.</p>
-                        <ul class="space-y-2 mb-4">
-                            <li><a href="/courses/regression.html" class="text-blue-600 hover:underline">Regression Analysis</a></li>
-                            <li><a href="/courses/time-series.html" class="text-blue-600 hover:underline">Time Series</a></li>
-                            <li><a href="/courses/hypothesis-testing.html" class="text-blue-600 hover:underline">Hypothesis Testing</a></li>
-                        </ul>
-                        <a href="assets/notes/econometrics-latex.tex" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded font-medium" download>Download LaTeX Template</a>
-                        <audio controls class="mt-4 w-full">
-                            <source src="assets/audio/econometrics-intro.mp3" type="audio/mpeg">
-                            Your browser does not support the audio element.
-                        </audio>
-                    </div>
-                </div>
-            </div>
-
-            <div class="module-accordion">
-                <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" aria-expanded="false" aria-controls="development-content">
-                    <h2 class="text-xl font-bold text-gray-800 flex justify-between items-center">
-                        Development Economics <span class="text-sm text-gray-500">Click to expand</span>
-                    </h2>
-                </div>
-                <div id="development-content" class="module-content">
-                    <div class="p-6 border-t">
-                        <p class="text-gray-600 mb-4">Study of economic development in low-income countries.</p>
-                        <ul class="space-y-2 mb-4">
-                            <li><a href="/courses/poverty-inequality.html" class="text-blue-600 hover:underline">Poverty and Inequality</a></li>
-                            <li><a href="/courses/human-capital.html" class="text-blue-600 hover:underline">Human Capital</a></li>
-                            <li><a href="/courses/development-policy.html" class="text-blue-600 hover:underline">Development Policy</a></li>
-                        </ul>
-                        <a href="assets/notes/development-case-studies.pdf" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded font-medium" download>Download Case Studies</a>
-                        <div class="flashcard mt-4">
-                            <div class="flashcard-inner">
-                                <div class="flashcard-front bg-white p-4 border rounded-lg shadow cursor-pointer" onclick="flipCard(this)">
-                                    <h4 class="font-bold">Gini Coefficient</h4>
-                                </div>
-                                <div class="flashcard-back bg-green-50 p-4 border rounded-lg shadow">
-                                    <h4 class="font-bold text-green-800">Definition</h4>
-                                    <p class="text-sm text-gray-600">Measures income or wealth distribution, 0 for perfect equality, 1 for perfect inequality.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="module-accordion">
-                <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" aria-expanded="false" aria-controls="finance-content">
-                    <h2 class="text-xl font-bold text-gray-800 flex justify-between items-center">
-                        Finance <span class="text-sm text-gray-500">Click to expand</span>
-                    </h2>
-                </div>
-                <div id="finance-content" class="module-content">
-                    <div class="p-6 border-t">
-                        <p class="text-gray-600 mb-4">Financial economics and markets.</p>
-                        <ul class="space-y-2 mb-4">
-                            <li><a href="/courses/capital-markets.html" class="text-blue-600 hover:underline">Capital Markets</a></li>
-                            <li><a href="/courses/risk-management.html" class="text-blue-600 hover:underline">Risk Management</a></li>
-                            <li><a href="/courses/financial-instruments.html" class="text-blue-600 hover:underline">Financial Instruments</a></li>
-                        </ul>
-                        <a href="assets/notes/finance-formulas.pdf" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded font-medium" download>Download Formula Sheet</a>
-                    </div>
-                </div>
-            </div>
+        <div id="coursesContainer" class="space-y-6">
+            <p class="text-gray-600">Loading courses...</p>
         </div>
 
         <!-- Interactive Graph -->
-        <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+        <div class="bg-white rounded-xl p-8 shadow-lg mb-8 mt-12">
             <h2 class="text-2xl font-bold text-gray-800 mb-6 font-serif">Interactive Supply-Demand Graph</h2>
             <p class="text-gray-600 mb-4">Adjust price to see how supply and demand intersect.</p>
             <div class="flex mb-4">
@@ -255,8 +139,62 @@
                 ease: "power2.out"
             });
 
+            // Load courses dynamically
+            async function loadCourses() {
+                try {
+                    const response = await fetch('/api/courses');
+                    if (!response.ok) throw new Error('Failed to fetch courses');
+                    const courses = await response.json();
+                    const container = document.getElementById('coursesContainer');
+                    container.innerHTML = '';
+                    courses.forEach(course => {
+                        const accordion = document.createElement('div');
+                        accordion.className = 'module-accordion';
+                        accordion.innerHTML = `
+                            <div class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all" onclick="toggleModule(this)" aria-expanded="false" aria-controls="course-${course.id}-content">
+                                <h2 class="text-xl font-bold text-gray-800 flex justify-between items-center">
+                                    <span>${course.module}</span>
+                                    <span class="text-sm text-gray-500">Click to expand</span>
+                                </h2>
+                            </div>
+                            <div id="course-${course.id}-content" class="module-content">
+                                <div class="p-6 border-t">
+                                    <p class="text-gray-600 mb-4">Explore the fundamentals of ${course.module.toLowerCase()}.</p>
+                                    <a href="/course/${course.id}" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors font-serif inline-block">View Full Course</a>
+                                    ${course.notes_url ? `<a href="${course.notes_url}" class="ml-4 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded font-medium" download>Download Notes</a>` : ''}
+                                </div>
+                            </div>
+                        `;
+                        container.appendChild(accordion);
+                    });
+                    if (courses.length === 0) {
+                        container.innerHTML = '<p class="text-gray-600 text-center">No courses available. Contact admin to add courses.</p>';
+                    }
+                    // Animate in
+                    gsap.from('.module-accordion', {duration: 0.6, y: 30, opacity: 0, stagger: 0.1, ease: "power2.out"});
+                } catch (error) {
+                    console.error('Error loading courses:', error);
+                    document.getElementById('coursesContainer').innerHTML = '<p class="text-red-500 text-center">Error loading courses. Please try again.</p>';
+                }
+            }
+            loadCourses();
+
+            // Search functionality
+            document.getElementById('courseSearch').addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const accordions = document.querySelectorAll('.module-accordion');
+                accordions.forEach(accordion => {
+                    const title = accordion.querySelector('h2').textContent.toLowerCase();
+                    if (title.includes(query)) {
+                        accordion.style.display = 'block';
+                    } else {
+                        accordion.style.display = 'none';
+                    }
+                });
+            });
+
             // Accordion
-            function toggleModule(element) {
+            window.toggleModule = function(element) {
                 const content = element.nextElementSibling;
                 const isActive = element.classList.contains('active');
                 element.classList.toggle('active');
@@ -267,13 +205,8 @@
                 }
             }
 
-            // Flashcard flip
-            function flipCard(element) {
-                element.parentElement.parentElement.classList.toggle('flipped');
-            }
-
             // Multilingual toggle
-            function toggleLanguage() {
+            window.toggleLanguage = function() {
                 const body = document.body;
                 if (body.classList.contains('lang-en')) {
                     body.classList.remove('lang-en');

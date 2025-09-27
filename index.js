@@ -323,6 +323,31 @@ app.put('/admin/terms/:id', async (req, res) => {
   }
 });
 
+// Courses APIs
+app.get('/api/courses', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM courses ORDER BY id ASC');
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch courses' });
+  }
+});
+
+app.get('/api/courses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rows } = await pool.query('SELECT * FROM courses WHERE id = $1', [parseInt(id)]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Course not found' });
+    }
+    res.json(rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch course' });
+  }
+});
+
 app.delete('/admin/terms/:id', async (req, res) => {
   try {
     const { id } = req.params;
