@@ -3,7 +3,6 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 const { Pool } = require('pg');
-const initDb = require('./init-db'); // Assuming init-db.js sets up the DB if needed
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,9 +17,6 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
-
-// Optional: Initialize database on startup (e.g., run init-db)
-initDb(pool).catch(err => console.error('DB init error:', err));
 
 // Routes
 app.get('/', (req, res) => {
